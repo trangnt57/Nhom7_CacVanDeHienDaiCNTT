@@ -15,7 +15,13 @@
 ** limitations under the License.
 */
 -->
-
+<!--
+ ** Edit by tuanpt on 21/09/2015: Change setting to fit android studio project
+ ** Fix Error:(2) Attribute "icon" has already been defined
+        Error:(2) Attribute "title" has already been defined
+        Error:(2) Attribute "background" has already been defined
+  ** By delete: format="reference"
+-->
 <resources>
 
     <!-- Page Indicator specific attributes. -->
@@ -112,8 +118,8 @@
         <attr name="y" format="string" />
         <attr name="spanX" format="string" />
         <attr name="spanY" format="string" />
-        <attr name="icon" format="reference" />  
-        <attr name="title" format="reference" />
+        <attr name="icon" />
+        <attr name="title" />
         <attr name="uri" format="string" />
     </declare-styleable>
 
@@ -127,7 +133,7 @@
     </declare-styleable>
 
     <declare-styleable name="PreloadIconDrawable">
-        <attr name="background" format="reference" />
+        <attr name="background" />
         <attr name="ringOutset" format="dimension" />
         <attr name="indicatorSize" format="dimension" />
     </declare-styleable>
