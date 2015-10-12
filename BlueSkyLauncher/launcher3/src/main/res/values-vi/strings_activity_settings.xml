@@ -1,17 +1,17 @@
 <resources>
-    <string name="title_activity_settings">Settings</string>
-    <string name="pref_category_ui">User interface</string>
+    <string name="title_activity_settings">Cài đặt</string>
+    <string name="pref_category_ui">Giao diện</string>
 
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">Thông thường</string>
 
     <!-- List layout -->
-    <string name="app_layout">Launcher layout</string>
+    <string name="app_layout">Bố cục hiển thị ứng dụng</string>
     <string-array name="app_layout_titles">
-        <item>Grid View</item>
-        <item>List View</item>
+        <item>Dạng lưới</item>
+        <item>Dạng danh sách</item>
     </string-array>
     <string-array name="app_layout_values">
         <item>0</item>
@@ -34,5 +34,5 @@
         <item>3</item>
         <item>4</item>
     </string-array>
-
+    
 </resources>
