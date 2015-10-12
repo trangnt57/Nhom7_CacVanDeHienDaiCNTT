@@ -106,6 +106,7 @@ import g7.bluesky.launcher3.compat.PackageInstallerCompat;
 import g7.bluesky.launcher3.compat.PackageInstallerCompat.PackageInstallInfo;
 import g7.bluesky.launcher3.compat.UserHandleCompat;
 import g7.bluesky.launcher3.compat.UserManagerCompat;
+import g7.bluesky.launcher3.setting.SettingsActivity;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -1188,7 +1189,7 @@ public class Launcher extends Activity
         if (mLauncherCallbacks != null) {
             return mLauncherCallbacks.hasSettings();
         }
-        return false;
+        return true;
     }
 
 
@@ -2818,6 +2819,9 @@ public class Launcher extends Activity
      */
     protected void onClickSettingsButton(View v) {
         if (LOGD) Log.d(TAG, "onClickSettingsButton");
+        final Intent settingsActivity = new Intent();
+        settingsActivity.setComponent(new ComponentName(getPackageName(), SettingsActivity.class.getName()));
+        startActivity(settingsActivity);
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onClickSettingsButton(v);
         }
