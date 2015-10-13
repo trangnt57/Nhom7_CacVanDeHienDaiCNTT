@@ -17,12 +17,9 @@
 ** limitations under the License.
 */
 -->
-<!--
- ** Edit by tuanpt on 21/09/2015: Change setting to fit android studio project
--->
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="g7.bluesky.launcher3">
+<!--  ** Edit by tuanpt on 21/09/2015: Change setting to fit android studio project -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="g7.bluesky.launcher3" >
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -76,7 +73,9 @@
     <uses-permission android:name="g7.bluesky.launcher3.permission.RECEIVE_FIRST_LOAD_BROADCAST" />
 
     <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- Removed LauncherBackupAgentHelper to avoid compiled error :( -->
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Removed LauncherBackupAgentHelper to avoid compiled error :( -->
     <!-- android:backupAgent="g7.bluesky.launcher3.LauncherBackupAgentHelper" -->
     <application
         android:name=".LauncherApplication"
@@ -258,6 +257,19 @@
             android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.MONKEY" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".listview.AppsListViewActivity"
+            android:label="@string/title_activity_apps_list_view"
+            android:stateNotNeeded="true"
+            android:theme="@style/AppsListViewTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY" />
             </intent-filter>

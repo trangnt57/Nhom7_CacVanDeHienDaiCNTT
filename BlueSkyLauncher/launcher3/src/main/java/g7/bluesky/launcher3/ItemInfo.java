@@ -31,6 +31,7 @@ import java.util.Arrays;
 
 /**
  * Represents an item in the launcher.
+ * Modified by tuanpt on 13/10/2015: add getter, setter
  */
 public class ItemInfo {
 
@@ -213,5 +214,21 @@ public class ItemInfo {
             + " screen=" + screenId + " cellX=" + cellX + " cellY=" + cellY + " spanX=" + spanX
             + " spanY=" + spanY + " dropPos=" + Arrays.toString(dropPos)
             + " user=" + user + ")";
+    }
+
+    public CharSequence getTitle() {
+        return title;
+    }
+
+    public void setTitle(CharSequence title) {
+        this.title = title;
+    }
+
+    public CharSequence getContentDescription() {
+        return contentDescription;
+    }
+
+    public void setContentDescription(CharSequence contentDescription) {
+        this.contentDescription = contentDescription;
     }
 }

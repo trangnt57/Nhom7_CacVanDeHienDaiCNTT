@@ -109,6 +109,8 @@ import g7.bluesky.launcher3.compat.PackageInstallerCompat;
 import g7.bluesky.launcher3.compat.PackageInstallerCompat.PackageInstallInfo;
 import g7.bluesky.launcher3.compat.UserHandleCompat;
 import g7.bluesky.launcher3.compat.UserManagerCompat;
+import g7.bluesky.launcher3.listview.AppsListViewActivity;
+import g7.bluesky.launcher3.setting.SettingConstants;
 import g7.bluesky.launcher3.setting.SettingsActivity;
 
 import java.io.DataInputStream;
@@ -368,6 +370,8 @@ public class Launcher extends Activity
     };
 
     private static PendingAddArguments sPendingAddItem;
+
+    private List<AppInfo> listApps;
 
     private static class PendingAddArguments {
         int requestCode;
@@ -2631,7 +2635,12 @@ public class Launcher extends Activity
         if (isAllAppsVisible()) {
             showWorkspace(true);
         } else {
-            showAllApps(true, AppsCustomizePagedView.ContentType.Applications, false);
+            if (defaultSharedPref.getString("app_layout", SettingConstants.LAUNCHER_GRID_LAYOUT).equals(SettingConstants.LAUNCHER_LIST_LAYOUT)) {
+                Intent appsListViewIntent = new Intent(this, AppsListViewActivity.class);
+                startActivity(appsListViewIntent);
+            } else {
+                showAllApps(true, AppsCustomizePagedView.ContentType.Applications, false);
+            }
         }
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onClickAllAppsButton(v);
@@ -4631,6 +4640,7 @@ public class Launcher extends Activity
         } else {
             if (mAppsCustomizeContent != null) {
                 mAppsCustomizeContent.setApps(apps);
+                this.listApps = apps;
                 mAppsCustomizeContent.onPackagesUpdated(
                         LauncherModel.getSortedWidgetsAndShortcuts(this));
             }

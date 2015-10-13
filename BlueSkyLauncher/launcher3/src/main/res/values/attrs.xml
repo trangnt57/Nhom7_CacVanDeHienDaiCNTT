@@ -141,4 +141,7 @@
     <declare-styleable name="InsettableFrameLayout_Layout">
         <attr name="layout_ignoreInsets" format="boolean" />
     </declare-styleable>
+
+    <!-- Use in AppsListView -->
+    <attr name="appListViewBackground" format="reference|color"/>
 </resources>

@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import g7.bluesky.launcher3.compat.LauncherActivityInfoCompat;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 
 /**
  * Represents an app in AllAppsView.
+ * Modified by tuanpt on 13/10/2015: add getter, setter
  */
 public class AppInfo extends ItemInfo {
     private static final String TAG = "Launcher3.AppInfo";
@@ -46,6 +48,8 @@ public class AppInfo extends ItemInfo {
      */
     Bitmap iconBitmap;
 
+    Drawable iconDrawable;
+
     /**
      * The time at which the app was first installed.
      */
@@ -58,7 +62,7 @@ public class AppInfo extends ItemInfo {
 
     int flags = 0;
 
-    AppInfo() {
+    public AppInfo() {
         itemType = LauncherSettings.BaseLauncherColumns.ITEM_TYPE_SHORTCUT;
     }
 
@@ -138,5 +142,33 @@ public class AppInfo extends ItemInfo {
             .setComponent(info.getComponentName())
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
             .putExtra(EXTRA_PROFILE, serialNumber);
+    }
+
+    public void setIntent(Intent intent) {
+        this.intent = intent;
+    }
+
+    public Bitmap getIconBitmap() {
+        return iconBitmap;
+    }
+
+    public void setIconBitmap(Bitmap iconBitmap) {
+        this.iconBitmap = iconBitmap;
+    }
+
+    public ComponentName getComponentName() {
+        return componentName;
+    }
+
+    public void setComponentName(ComponentName componentName) {
+        this.componentName = componentName;
+    }
+
+    public Drawable getIconDrawable() {
+        return iconDrawable;
+    }
+
+    public void setIconDrawable(Drawable iconDrawable) {
+        this.iconDrawable = iconDrawable;
     }
 }

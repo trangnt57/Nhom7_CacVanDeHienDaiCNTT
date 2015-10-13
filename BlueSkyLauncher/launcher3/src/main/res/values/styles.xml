@@ -17,6 +17,9 @@
 */
 -->
 
+
+<!--Modified by tuanpt on 10/13/2015.-->
+
 <resources>
 
     <style name="WorkspaceIcon">
@@ -96,6 +99,10 @@
     </style>
 
     <style name="SettingTheme" parent="@android:style/Theme.DeviceDefault.Light">
+    </style>
+
+    <style name="AppsListViewTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="appListViewBackground">@drawable/sky</item>
     </style>
 
 </resources>
