@@ -66,6 +66,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.os.SystemClock;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.text.Selection;
@@ -342,6 +343,10 @@ public class Launcher extends Activity
     // We only want to get the SharedPreferences once since it does an FS stat each time we get
     // it from the context.
     private SharedPreferences mSharedPrefs;
+    /**
+     * Preferences from @see #SettingsActivity
+     */
+    private SharedPreferences defaultSharedPref;
 
     private static ArrayList<ComponentName> mIntentsOnWorkspaceFromUpgradePath = null;
 
@@ -411,6 +416,10 @@ public class Launcher extends Activity
         // the LauncherApplication should call this, but in case of Instrumentation it might not be present yet
         mSharedPrefs = getSharedPreferences(LauncherAppState.getSharedPreferencesKey(),
                 Context.MODE_PRIVATE);
+
+        // Set defaultSharedPref
+        defaultSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         mIsSafeModeEnabled = getPackageManager().isSafeMode();
         mModel = app.setLauncher(this);
         mIconCache = app.getIconCache();
