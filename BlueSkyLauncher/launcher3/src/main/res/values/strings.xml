@@ -308,6 +308,8 @@ s -->
     <string name="abandoned_promise_explanation">The app for this icon isn\'t installed.
         You can remove it, or search for the app and install it manually.
     </string>
+
+    <string name="LOG_TAG">LongDT</string>
     <string name="title_activity_apps_list_view">AppsListViewActivity</string>
 
     <string name="action_settings">Settings</string>

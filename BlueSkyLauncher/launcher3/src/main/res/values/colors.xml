@@ -36,4 +36,6 @@
     <color name="outline_color">#FFFFFFFF</color>
     <color name="widget_text_panel">#FF374248</color>
 
+    <color name = "bg_exmenu">#EEEFEF</color>
+
 </resources>

@@ -98,9 +98,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Advanceable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import g7.bluesky.launcher3.DropTarget.DragObject;
+import g7.bluesky.launcher3.ExTraMenu.ExtraMenu;
 import g7.bluesky.launcher3.PagedView.PageSwitchListener;
 import g7.bluesky.launcher3.compat.AppWidgetManagerCompat;
 import g7.bluesky.launcher3.compat.LauncherActivityInfoCompat;
@@ -139,6 +141,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Launcher extends Activity
         implements View.OnClickListener, OnLongClickListener, LauncherModel.Callbacks,
                    View.OnTouchListener, PageSwitchListener, LauncherProviderChangeListener {
+
+    //extra Menu
+    //LinearLayout llExtraMenu;
+    public LauncherRootView flLauncher;
+
     static final String TAG = "Launcher";
     static final boolean LOGD = false;
 
@@ -389,6 +396,7 @@ public class Launcher extends Activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("LONGDT", "Start launcher");
         if (DEBUG_STRICT_MODE) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
@@ -504,6 +512,25 @@ public class Launcher extends Activity
             showFirstRunActivity();
             showFirstRunClings();
         }
+
+        //create extramenu
+        //llExtraMenu = (LinearLayout) findViewById(R.id.ll_extra_menu);
+        //llExtraMenu.addView(new ExtraMenu(this, null));
+        flLauncher = (LauncherRootView) findViewById(R.id.launcher);
+        flLauncher.addView(new ExtraMenu(this, null));
+//        flLauncher.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                Rect rect;
+//                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+//                Log.i("LongDT",v.getLeft()+"  "+ v.getTop()+"  "+ v.getRight()+"  "+ v.getBottom());
+//                Log.i("LongDT", event.getX()+"  "+event.getY());
+//                return true;
+//            }
+//
+//        });
+
     }
 
     private LauncherCallbacks mLauncherCallbacks;
