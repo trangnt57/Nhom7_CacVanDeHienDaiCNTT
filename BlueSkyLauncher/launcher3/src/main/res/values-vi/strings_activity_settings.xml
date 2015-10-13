@@ -1,0 +1,38 @@
+<resources>
+    <string name="title_activity_settings">Cài đặt</string>
+    <string name="pref_category_ui">Giao diện</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">Thông thường</string>
+
+    <!-- List layout -->
+    <string name="app_layout">Bố cục hiển thị ứng dụng</string>
+    <string-array name="app_layout_titles">
+        <item>Dạng lưới</item>
+        <item>Dạng danh sách</item>
+    </string-array>
+    <string-array name="app_layout_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <!-- Theme -->
+    <string name="app_theme">Theme</string>
+    <string-array name="app_theme_titles">
+        <item>BlueSky</item>
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Transparent</item>
+        <item>Semi-Transparent</item>
+    </string-array>
+    <string-array name="app_theme_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    
+</resources>

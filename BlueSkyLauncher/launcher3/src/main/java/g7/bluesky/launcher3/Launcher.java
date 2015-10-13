@@ -66,6 +66,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.os.SystemClock;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -108,6 +110,7 @@ import g7.bluesky.launcher3.compat.PackageInstallerCompat;
 import g7.bluesky.launcher3.compat.PackageInstallerCompat.PackageInstallInfo;
 import g7.bluesky.launcher3.compat.UserHandleCompat;
 import g7.bluesky.launcher3.compat.UserManagerCompat;
+import g7.bluesky.launcher3.setting.SettingsActivity;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -1215,7 +1218,7 @@ public class Launcher extends Activity
         if (mLauncherCallbacks != null) {
             return mLauncherCallbacks.hasSettings();
         }
-        return false;
+        return true;
     }
 
 
@@ -2845,6 +2848,11 @@ public class Launcher extends Activity
      */
     protected void onClickSettingsButton(View v) {
         if (LOGD) Log.d(TAG, "onClickSettingsButton");
+        final Intent settingsActivity = new Intent(this, SettingsActivity.class);
+        // Use only one setting fragment
+        settingsActivity.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName() );
+        settingsActivity.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
+        startActivity(settingsActivity);
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onClickSettingsButton(v);
         }

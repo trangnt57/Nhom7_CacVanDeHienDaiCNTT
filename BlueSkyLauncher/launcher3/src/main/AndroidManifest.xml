@@ -23,36 +23,38 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="g7.bluesky.launcher3">
-    <uses-sdk android:targetSdkVersion="22" android:minSdkVersion="16"/>
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="22" />
 
     <permission
         android:name="com.android.launcher.permission.INSTALL_SHORTCUT"
-        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="dangerous"
+        android:description="@string/permdesc_install_shortcut"
         android:label="@string/permlab_install_shortcut"
-        android:description="@string/permdesc_install_shortcut" />
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="dangerous" />
     <permission
         android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"
-        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="dangerous"
+        android:description="@string/permdesc_uninstall_shortcut"
         android:label="@string/permlab_uninstall_shortcut"
-        android:description="@string/permdesc_uninstall_shortcut"/>
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="dangerous" />
     <permission
         android:name="g7.bluesky.launcher3.permission.READ_SETTINGS"
-        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="normal"
+        android:description="@string/permdesc_read_settings"
         android:label="@string/permlab_read_settings"
-        android:description="@string/permdesc_read_settings"/>
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal" />
     <permission
         android:name="g7.bluesky.launcher3.permission.WRITE_SETTINGS"
-        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="signatureOrSystem"
+        android:description="@string/permdesc_write_settings"
         android:label="@string/permlab_write_settings"
-        android:description="@string/permdesc_write_settings"/>
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="signatureOrSystem" />
     <permission
         android:name="g7.bluesky.launcher3.permission.RECEIVE_LAUNCH_BROADCASTS"
-        android:protectionLevel="signature"
-        />
+        android:protectionLevel="signature" />
     <permission
         android:name="g7.bluesky.launcher3.permission.RECEIVE_FIRST_LOAD_BROADCAST"
         android:protectionLevel="signatureOrSystem" />
@@ -64,7 +66,7 @@
     <uses-permission android:name="android.permission.BIND_APPWIDGET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
@@ -74,10 +76,11 @@
     <uses-permission android:name="g7.bluesky.launcher3.permission.RECEIVE_FIRST_LOAD_BROADCAST" />
     <uses-permission android:name="android.permission.write_external_storage"   />
 
-    <!-- Removed LauncherBackupAgentHelper to avoid compiled error :(-->
-    <!--android:backupAgent="g7.bluesky.launcher3.LauncherBackupAgentHelper"-->
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- Removed LauncherBackupAgentHelper to avoid compiled error :( -->
+    <!-- android:backupAgent="g7.bluesky.launcher3.LauncherBackupAgentHelper" -->
     <application
-        android:name="g7.bluesky.launcher3.LauncherApplication"
+        android:name=".LauncherApplication"
         android:allowBackup="@bool/enable_backup"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher_home"
@@ -85,103 +88,103 @@
         android:largeHeap="@bool/config_largeHeap"
         android:restoreAnyVersion="true"
         android:supportsRtl="true" >
-
         <activity
-            android:name="g7.bluesky.launcher3.Launcher"
-            android:launchMode="singleTask"
+            android:name=".Launcher"
             android:clearTaskOnLaunch="true"
+            android:enabled="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="nosensor"
             android:stateNotNeeded="true"
             android:theme="@style/Theme"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="nosensor"
-            android:enabled="true">
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.MONKEY"/>
+                <category android:name="android.intent.category.MONKEY" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="g7.bluesky.launcher3.LauncherExtension"
-            android:launchMode="singleTask"
+            android:name=".LauncherExtension"
             android:clearTaskOnLaunch="true"
+            android:enabled="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="nosensor"
             android:stateNotNeeded="true"
             android:theme="@style/Theme"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="nosensor"
-            android:enabled="false">
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.MONKEY"/>
+                <category android:name="android.intent.category.MONKEY" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="g7.bluesky.launcher3.ToggleWeightWatcher"
-            android:label="@string/toggle_weight_watcher"
+            android:name=".ToggleWeightWatcher"
             android:enabled="@bool/debug_memory_enabled"
-            android:icon="@mipmap/ic_launcher_home">
+            android:icon="@mipmap/ic_launcher_home"
+            android:label="@string/toggle_weight_watcher" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="g7.bluesky.launcher3.LauncherWallpaperPickerActivity"
-            android:theme="@style/Theme.WallpaperPicker"
-            android:label="@string/pick_wallpaper"
-            android:icon="@mipmap/ic_launcher_wallpaper"
+            android:name=".LauncherWallpaperPickerActivity"
             android:finishOnCloseSystemDialogs="true"
-            android:process=":wallpaper_chooser">
+            android:icon="@mipmap/ic_launcher_wallpaper"
+            android:label="@string/pick_wallpaper"
+            android:process=":wallpaper_chooser"
+            android:theme="@style/Theme.WallpaperPicker" >
             <intent-filter>
                 <action android:name="android.intent.action.SET_WALLPAPER" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="g7.bluesky.launcher3.WallpaperCropActivity"
-            android:theme="@style/Theme.WallpaperCropper"
-            android:label="@string/crop_wallpaper"
-            android:icon="@mipmap/ic_launcher_wallpaper"
+            android:name=".WallpaperCropActivity"
             android:finishOnCloseSystemDialogs="true"
-            android:process=":wallpaper_chooser">
+            android:icon="@mipmap/ic_launcher_wallpaper"
+            android:label="@string/crop_wallpaper"
+            android:process=":wallpaper_chooser"
+            android:theme="@style/Theme.WallpaperCropper" >
             <intent-filter>
                 <action android:name="android.service.wallpaper.CROP_AND_SET_WALLPAPER" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
 
         <!-- Debugging tools -->
         <activity
-            android:name="g7.bluesky.launcher3.MemoryDumpActivity"
-            android:theme="@android:style/Theme.NoDisplay"
-            android:label="@string/debug_memory_activity"
+            android:name=".MemoryDumpActivity"
             android:enabled="@bool/debug_memory_enabled"
             android:excludeFromRecents="true"
             android:icon="@mipmap/ic_launcher_home"
-            >
+            android:label="@string/debug_memory_activity"
+            android:theme="@android:style/Theme.NoDisplay" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <service android:name="g7.bluesky.launcher3.MemoryTracker"
-            android:enabled="@bool/debug_memory_enabled"
-            >
+        <service
+            android:name=".MemoryTracker"
+            android:enabled="@bool/debug_memory_enabled" >
         </service>
 
-        <receiver
-            android:name="g7.bluesky.launcher3.WallpaperChangedReceiver">
+        <receiver android:name=".WallpaperChangedReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.WALLPAPER_CHANGED" />
             </intent-filter>
@@ -189,8 +192,8 @@
 
         <!-- Intent received used to install shortcuts from other applications -->
         <receiver
-            android:name="g7.bluesky.launcher3.InstallShortcutReceiver"
-            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT">
+            android:name=".InstallShortcutReceiver"
+            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT" >
             <intent-filter>
                 <action android:name="com.android.launcher.action.INSTALL_SHORTCUT" />
             </intent-filter>
@@ -198,39 +201,38 @@
 
         <!-- Intent received used to uninstall shortcuts from other applications -->
         <receiver
-            android:name="g7.bluesky.launcher3.UninstallShortcutReceiver"
-            android:permission="com.android.launcher.permission.UNINSTALL_SHORTCUT">
+            android:name=".UninstallShortcutReceiver"
+            android:permission="com.android.launcher.permission.UNINSTALL_SHORTCUT" >
             <intent-filter>
                 <action android:name="com.android.launcher.action.UNINSTALL_SHORTCUT" />
             </intent-filter>
         </receiver>
 
         <!-- Intent received used to initialize a restored widget -->
-        <receiver android:name="g7.bluesky.launcher3.AppWidgetsRestoredReceiver" >
+        <receiver android:name=".AppWidgetsRestoredReceiver" >
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_HOST_RESTORED"/>
+                <action android:name="android.appwidget.action.APPWIDGET_HOST_RESTORED" />
             </intent-filter>
         </receiver>
 
         <!-- New user initialization; set up initial wallpaper -->
         <receiver
-            android:name="g7.bluesky.launcher3.UserInitializeReceiver"
-            android:exported="false">
+            android:name=".UserInitializeReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.USER_INITIALIZE" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="g7.bluesky.launcher3.PackageChangedReceiver" >
+        <receiver android:name=".PackageChangedReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_CHANGED"/>
-                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"></data>
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="g7.bluesky.launcher3.StartupReceiver" >
+        <receiver android:name=".StartupReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -238,13 +240,29 @@
 
         <!-- The settings provider contains Home's data, like the workspace favorites -->
         <provider
-            android:name="g7.bluesky.launcher3.LauncherProvider"
+            android:name=".LauncherProvider"
             android:authorities="g7.bluesky.launcher3.settings"
             android:exported="true"
-            android:writePermission="g7.bluesky.launcher3.permission.WRITE_SETTINGS"
-            android:readPermission="g7.bluesky.launcher3.permission.READ_SETTINGS" />
+            android:readPermission="g7.bluesky.launcher3.permission.READ_SETTINGS"
+            android:writePermission="g7.bluesky.launcher3.permission.WRITE_SETTINGS" />
 
-        <meta-data android:name="android.nfc.disable_beam_default"
-                       android:value="true" />
+        <meta-data
+            android:name="android.nfc.disable_beam_default"
+            android:value="true" />
+
+        <activity
+            android:name=".setting.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="nosensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/SettingTheme"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.MONKEY" />
+            </intent-filter>
+        </activity>
     </application>
+
 </manifest>
