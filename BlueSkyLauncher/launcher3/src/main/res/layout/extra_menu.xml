@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_extramenu"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true">
+            <SlidingDrawer
+                android:id="@+id/extra_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+
+                android:handle="@+id/handle"
+                android:content="@+id/content">
+
+                <ImageView
+                    android:id="@+id/handle"
+                    android:layout_width="20dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/arrow_show"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/extra_background">
+                    <LinearLayout
+                        android:id="@+id/ll_extramenu_add"
+                        android:layout_alignParentBottom ="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        >
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#D1D1D1"/>
+                        <Button
+                            android:id="@+id/btn_extra_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:gravity="center"
+                            android:background="#BDC5C5"
+                            android:text="Sửa"
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="15dp"
+                            />
+                    </LinearLayout>
+                    <g7.bluesky.launcher3.ExTraMenu.dynamicgrid.DynamicGridView
+                        android:id="@+id/gv_ls_app"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_above="@+id/ll_extramenu_add"
+                        android:layout_alignParentTop="true"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:scrollbars="none"
+                        ></g7.bluesky.launcher3.ExTraMenu.dynamicgrid.DynamicGridView>
+                </RelativeLayout>
+
+            </SlidingDrawer>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_outside_extramenu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical"
+            android:layout_toLeftOf="@+id/ll_extramenu"
+            android:layout_toStartOf="@+id/ll_extramenu"></LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
