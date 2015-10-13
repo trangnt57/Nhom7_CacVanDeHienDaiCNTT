@@ -13,6 +13,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
+<!--Modified by tuanpt on 10/13/2015: Add edit text to filter apps -->
 <g7.bluesky.launcher3.AppsCustomizeTabHost
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:launcher="http://schemas.android.com/apk/res-auto"
@@ -24,6 +26,18 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/editTextFilterApps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@android:drawable/ic_menu_search"
+            android:imeOptions="flagNoExtractUi|actionSearch"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:background="@android:color/holo_blue_dark"/>
 
         <FrameLayout
             android:layout_width="match_parent"

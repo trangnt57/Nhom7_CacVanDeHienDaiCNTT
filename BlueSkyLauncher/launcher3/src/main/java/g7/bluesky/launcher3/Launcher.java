@@ -66,12 +66,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.os.SystemClock;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.text.Editable;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.util.Log;
 import android.view.Display;
@@ -96,9 +97,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Advanceable;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import g7.bluesky.launcher3.DropTarget.DragObject;
@@ -379,6 +380,7 @@ public class Launcher extends Activity
     private static PendingAddArguments sPendingAddItem;
 
     private List<AppInfo> listApps;
+    private EditText editTextFilterApps;
 
     private static class PendingAddArguments {
         int requestCode;
@@ -530,6 +532,37 @@ public class Launcher extends Activity
 //            }
 //
 //        });
+
+        editTextFilterApps = (EditText) findViewById(R.id.editTextFilterApps);
+
+        editTextFilterApps.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                String searchString = editTextFilterApps.getText().toString();
+                if (searchString.trim().length() > 0) {
+                    ArrayList<AppInfo> searchList = new ArrayList<>();
+                    for (AppInfo appInfo : listApps) {
+                        if (appInfo.getTitle().toString().toLowerCase().contains(searchString.toLowerCase())) {
+                            searchList.add(appInfo);
+                        }
+                    }
+                    mAppsCustomizeContent.setApps(searchList);
+                } else {
+                    mAppsCustomizeContent.setApps((ArrayList<AppInfo>) listApps);
+                }
+            }
+        });
 
     }
 
@@ -2666,6 +2699,12 @@ public class Launcher extends Activity
                 Intent appsListViewIntent = new Intent(this, AppsListViewActivity.class);
                 startActivity(appsListViewIntent);
             } else {
+                // Show filter in Apps view
+                editTextFilterApps.setVisibility(View.VISIBLE);
+                // Reset filter
+               editTextFilterApps.setText("");
+
+
                 showAllApps(true, AppsCustomizePagedView.ContentType.Applications, false);
             }
         }
@@ -2838,6 +2877,9 @@ public class Launcher extends Activity
         if (mIsSafeModeEnabled) {
             Toast.makeText(this, R.string.safemode_widget_error, Toast.LENGTH_SHORT).show();
         } else {
+            // Hide filter in Widget view
+            editTextFilterApps.setVisibility(View.GONE);
+
             showAllApps(true, AppsCustomizePagedView.ContentType.Widgets, true);
             if (mLauncherCallbacks != null) {
                 mLauncherCallbacks.onClickAddWidgetButton(view);
@@ -3419,7 +3461,7 @@ public class Launcher extends Activity
             if (isWidgetTray) {
                 revealView.setBackground(res.getDrawable(R.drawable.quantum_panel_dark));
             } else {
-                revealView.setBackground(res.getDrawable(R.drawable.quantum_panel));
+                revealView.setBackground(res.getDrawable(R.drawable.sky));
             }
 
             // Hide the real page background, and swap in the fake one
@@ -3672,7 +3714,7 @@ public class Launcher extends Activity
                 if (isWidgetTray) {
                     revealView.setBackground(res.getDrawable(R.drawable.quantum_panel_dark));
                 } else {
-                    revealView.setBackground(res.getDrawable(R.drawable.quantum_panel));
+                    revealView.setBackground(res.getDrawable(R.drawable.sky));
                 }
 
                 int width = revealView.getMeasuredWidth();
