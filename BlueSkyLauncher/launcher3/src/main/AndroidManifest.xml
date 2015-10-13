@@ -267,6 +267,7 @@
             android:name=".listview.AppsListViewActivity"
             android:label="@string/title_activity_apps_list_view"
             android:stateNotNeeded="true"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppsListViewTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

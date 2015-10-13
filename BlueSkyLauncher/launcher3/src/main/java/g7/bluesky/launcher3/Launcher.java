@@ -550,16 +550,18 @@ public class Launcher extends Activity
             @Override
             public void afterTextChanged(Editable arg0) {
                 String searchString = editTextFilterApps.getText().toString();
-                if (searchString.trim().length() > 0) {
-                    ArrayList<AppInfo> searchList = new ArrayList<>();
-                    for (AppInfo appInfo : listApps) {
-                        if (appInfo.getTitle().toString().toLowerCase().contains(searchString.toLowerCase())) {
-                            searchList.add(appInfo);
+                if (listApps != null && listApps.size() > 0) {
+                    if (searchString.trim().length() > 0) {
+                        ArrayList<AppInfo> searchList = new ArrayList<>();
+                        for (AppInfo appInfo : listApps) {
+                            if (appInfo.getTitle().toString().toLowerCase().contains(searchString.toLowerCase())) {
+                                searchList.add(appInfo);
+                            }
                         }
+                        mAppsCustomizeContent.setApps(searchList);
+                    } else {
+                        mAppsCustomizeContent.setApps((ArrayList<AppInfo>) listApps);
                     }
-                    mAppsCustomizeContent.setApps(searchList);
-                } else {
-                    mAppsCustomizeContent.setApps((ArrayList<AppInfo>) listApps);
                 }
             }
         });
