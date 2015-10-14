@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -72,7 +73,16 @@ public class ExtraMenu extends LinearLayout{
 		exmiAdapter = new ExtraMenuItemAdapter(mContext, mPacs, 1);
 		gr_content.setAdapter(exmiAdapter);
 		gr_content.setOnItemClickListener(new ExtraMenuItemClickListener(mContext, mPacs));
+		gr_content.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
 
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				time_start = System.currentTimeMillis();
+			}
+		});
 
 		//change arrow icon when open menu
 		mExtraMenu.setOnDrawerOpenListener(new OnDrawerOpenListener() {
@@ -117,7 +127,7 @@ public class ExtraMenu extends LinearLayout{
 		btn_etra_edit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(btn_etra_edit.getText().toString().compareTo(BTN_EDIT_XONG)== 0){
+				if (btn_etra_edit.getText().toString().compareTo(BTN_EDIT_XONG) == 0) {
 					btn_etra_edit.setText(BTN_EDIT_SUA);
 					update_applist(exmiAdapter.getItems());
 					saveToFile();
@@ -125,7 +135,7 @@ public class ExtraMenu extends LinearLayout{
 					is_autoclose = true;
 
 					GridView gr_applist = gr_content;
-					for(int i=0; i< gr_applist.getChildCount(); i++){
+					for (int i = 0; i < gr_applist.getChildCount(); i++) {
 						View v = gr_applist.getChildAt(i);
 						ImageView img_delete = (ImageView) v.findViewById(R.id.img_extramenu_app_delete);
 						img_delete.setImageResource(R.drawable.blank);
@@ -259,6 +269,14 @@ public class ExtraMenu extends LinearLayout{
 		}
 
 	}
+
+	public void hide(){
+		setVisibility(LinearLayout.GONE);
+	}
+	public void unhide(){
+		setVisibility(LinearLayout.VISIBLE);
+	}
+
 
 	Context mContext;
 	SlidingDrawer mExtraMenu;
