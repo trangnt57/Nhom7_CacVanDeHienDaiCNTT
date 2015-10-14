@@ -42,8 +42,8 @@ public class ExtraMenuItemAdapter extends BaseDynamicGridAdapter{
 		img_app_delete = (ImageView) convertView.findViewById(R.id.img_extramenu_app_delete);
 
 		AppInfo app = (AppInfo)getItem(position);
-		app_icon.setImageDrawable(app.icon);
-		app_name.setText(app.label);
+		app_icon.setImageDrawable(app.getIconDrawable());
+		app_name.setText(app.getTitle());
 		img_app_delete.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

@@ -78,14 +78,21 @@ public class ExtraMenu extends LinearLayout{
 		gr_content.setAdapter(exmiAdapter);
 		gr_content.setOnItemClickListener(new ExtraMenuItemClickListener(mContext, mPacs));
 
-
-		gr_content.setOnScrollListener(new AbsListView.OnScrollListener() {
+		//keep extramenu unhide
+//		gr_content.setOnScrollListener(new AbsListView.OnScrollListener() {
+//			@Override
+//			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+//
+//			@Override
+//			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//				time_start = System.currentTimeMillis();
+//			}
+//		});
+		gr_content.setOnTouchListener(new OnTouchListener() {
 			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+			public boolean onTouch(View v, MotionEvent event) {
 				time_start = System.currentTimeMillis();
+				return false;
 			}
 		});
 
@@ -200,10 +207,7 @@ public class ExtraMenu extends LinearLayout{
 
 		for(int j=0; j<10; j++){
 			AppInfo p = new AppInfo();
-			p.icon=pacsList.get(j).loadIcon(pm);
-			p.packageName=pacsList.get(j).activityInfo.packageName;
-			p.name=pacsList.get(j).activityInfo.name;
-			p.label=pacsList.get(j).loadLabel(pm).toString();
+			p.setInfo(pacsList.get(j), pm);
 			mPacs.add(p);
 		}
 	}
@@ -212,8 +216,8 @@ public class ExtraMenu extends LinearLayout{
 		for(int i=0; i<mPacs.size(); i++){
 			JSONObject tmp = new JSONObject();
 			try {
-				tmp.put(PACKAGE, mPacs.get(i).packageName);
-				tmp.put(NAME, mPacs.get(i).name);
+				tmp.put(PACKAGE, mPacs.get(i).getComponentName().getPackageName());
+				tmp.put(NAME, mPacs.get(i).getName());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -259,10 +263,7 @@ public class ExtraMenu extends LinearLayout{
 					if(tmp.getString(PACKAGE).compareTo(pacsList.get(j).activityInfo.packageName) == 0
 							|| tmp.getString(NAME).compareTo(pacsList.get(j).activityInfo.name) == 0){
 						AppInfo p = new AppInfo();
-						p.icon=pacsList.get(j).loadIcon(pm);
-						p.packageName=pacsList.get(j).activityInfo.packageName;
-						p.name=pacsList.get(j).activityInfo.name;
-						p.label=pacsList.get(j).loadLabel(pm).toString();
+						p.setInfo(pacsList.get(j), pm);
 						mPacs.add(p);
 						//ll_content.addView(new AppLauncher(mContext, p, (AttributeSet)null));
 						break;

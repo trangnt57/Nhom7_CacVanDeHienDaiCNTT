@@ -31,8 +31,8 @@ public class AppLauncher extends LinearLayout
         ImageView imgIcon = (ImageView) this.findViewById(R.id.app_icon);
         TextView tvName = (TextView) this.findViewById(R.id.app_name);
 
-        imgIcon.setImageDrawable(mApp.icon);
-        tvName.setText(mApp.label);
+        imgIcon.setImageDrawable(mApp.getIconDrawable());
+        tvName.setText(mApp.getTitle());
 
     }
 }
