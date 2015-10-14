@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
@@ -67,16 +68,20 @@ public class ExtraMenu extends LinearLayout{
 		llExtraMenu = (LinearLayout) this.findViewById(R.id.ll_outside_extramenu);
 
 
-		//load applist from filnOnUiThread(new Runnable() { e sharedferenced
-		//readFromFile();
-		setApplistDefault();
+		//load applist from a xml file or 10 top app if this is the first time
+		File f = new File("/data/data/g7.bluesky.launcher3/shared_prefs/"+FILE_NAME+".xml");
+		if(f.exists())
+			readFromFile();
+		else
+			setApplistDefault();
 		exmiAdapter = new ExtraMenuItemAdapter(mContext, mPacs, 1);
 		gr_content.setAdapter(exmiAdapter);
 		gr_content.setOnItemClickListener(new ExtraMenuItemClickListener(mContext, mPacs));
+
+
 		gr_content.setOnScrollListener(new AbsListView.OnScrollListener() {
 			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-			}
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {

@@ -40,7 +40,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:gravity="center_horizontal"
+                        android:gravity="center"
                         >
 
                         <ImageView
@@ -52,14 +52,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:gravity="center"
-                            android:background="#BDC5C5"
+                            android:background="@drawable/extramenu_sua"
                             android:text="Sửa"
                             android:textColor="@android:color/black"
                             android:textSize="12sp"
                             style="?android:attr/borderlessButtonStyle"
                             android:layout_marginTop="15dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="7dp"
+                            android:layout_marginRight="7dp"
                             android:layout_marginBottom="15dp"
                             />
                     </LinearLayout>
