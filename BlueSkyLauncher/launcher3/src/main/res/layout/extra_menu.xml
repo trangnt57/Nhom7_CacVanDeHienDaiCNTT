@@ -4,6 +4,7 @@
 
     >
     <RelativeLayout
+        android:id="@+id/rl_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -52,7 +53,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:gravity="center"
-                            android:background="@drawable/extramenu_sua"
+                            android:background="#C5CCCE"
                             android:text="Sửa"
                             android:textColor="@android:color/black"
                             android:textSize="12sp"
@@ -79,12 +80,25 @@
             </SlidingDrawer>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/ll_outside_extramenu"
+            android:id="@+id/ll_extramenu_add_app"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:orientation="vertical"
             android:layout_toLeftOf="@+id/ll_extramenu"
-            android:layout_toStartOf="@+id/ll_extramenu"></LinearLayout>
+            android:layout_toStartOf="@+id/ll_extramenu"
+            >
+
+            <GridView
+                android:id="@+id/extramenu_gr_add_app"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:scrollbars="none"
+                android:numColumns="3"
+                android:visibility="gone"
+                ></GridView>
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

@@ -44,28 +44,18 @@ public class AppAddItemAdapter extends BaseAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         ImageView app_icon;
         TextView app_name;
-        ImageView img_app_delete;
         LayoutInflater li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null){
-            convertView = li.inflate(R.layout.extramenu_item, null);
+            convertView = li.inflate(R.layout.extra_app_add_item, null);
 
 
         }
-        app_icon = (ImageView) convertView.findViewById(R.id.app_icon);
-        app_name = (TextView) convertView.findViewById(R.id.app_name);
-        img_app_delete = (ImageView) convertView.findViewById(R.id.img_extramenu_app_delete);
+        app_icon = (ImageView) convertView.findViewById(R.id.im_add_app_icon);
+        app_name = (TextView) convertView.findViewById(R.id.tv_add_app_name);
 
         AppInfo app = (AppInfo)getItem(position);
         app_icon.setImageDrawable(app.getIconDrawable());
         app_name.setText(app.getTitle());
-        img_app_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mApplist.remove(position);
-                notifyDataSetChanged();
-            }
-        });
-        img_app_delete.setEnabled(false);
 
         return convertView;
     }
