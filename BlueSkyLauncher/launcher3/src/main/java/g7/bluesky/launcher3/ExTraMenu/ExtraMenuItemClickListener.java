@@ -29,8 +29,8 @@ public class ExtraMenuItemClickListener implements OnItemClickListener{
 		// TODO Auto-generated method stub
 		Intent launchIntent = new Intent(Intent.ACTION_MAIN);
 		launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-		ComponentName cp = new ComponentName(mPacs.get(position).getComponentName().getPackageName(), mPacs.get(position).getName());
-		launchIntent.setComponent(cp);
+		//ComponentName cp = new ComponentName(mPacs.get(position).getComponentName().getPackageName(), mPacs.get(position).getName());
+		launchIntent.setComponent(mPacs.get(position).getComponentName());
 		mContext.startActivity(launchIntent);
 	}
 

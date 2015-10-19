@@ -6,19 +6,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
@@ -28,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
@@ -63,9 +62,11 @@ public class ExtraMenu extends LinearLayout{
 		mExtraMenu = (SlidingDrawer) this.findViewById(R.id.extra_menu);
 		im_hide_show = (ImageView) mExtraMenu.findViewById(R.id.handle);
 		gr_content = (DynamicGridView) mExtraMenu.findViewById(R.id.gv_ls_app);
-		//ll_content = (LinearLayout) mExtraMenu.findViewById(R.id.gv_ls_app);
+		gr_add_app = (GridView) this.findViewById(R.id.extramenu_gr_add_app);
 		btn_etra_edit = (Button) mExtraMenu.findViewById(R.id.btn_extra_edit);
-		llExtraMenu = (LinearLayout) this.findViewById(R.id.ll_outside_extramenu);
+		llExtraMenu = (LinearLayout) this.findViewById(R.id.ll_extramenu);
+		llAppAdd = (LinearLayout) this.findViewById(R.id.ll_extramenu_add_app);
+		rl_background = (RelativeLayout) this.findViewById(R.id.rl_background);
 
 
 		//load applist from a xml file or 10 top app if this is the first time
@@ -73,21 +74,13 @@ public class ExtraMenu extends LinearLayout{
 		if(f.exists())
 			readFromFile();
 		else
-			setApplistDefault();
+			mPacs = getApplistFromSystem(mContext.getPackageManager(), 10);
+
 		exmiAdapter = new ExtraMenuItemAdapter(mContext, mPacs, 1);
 		gr_content.setAdapter(exmiAdapter);
 		gr_content.setOnItemClickListener(new ExtraMenuItemClickListener(mContext, mPacs));
 
-		//keep extramenu unhide
-//		gr_content.setOnScrollListener(new AbsListView.OnScrollListener() {
-//			@Override
-//			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-//
-//			@Override
-//			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//				time_start = System.currentTimeMillis();
-//			}
-//		});
+		//delay autoclose
 		gr_content.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -119,18 +112,7 @@ public class ExtraMenu extends LinearLayout{
 		gr_content.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				gr_content.startEditMode();
-				btn_etra_edit.setText(BTN_EDIT_XONG);
-				is_autoclose = false;
-
-				//show the delete icon
-				GridView gr_applist = (GridView) view.getParent();
-				for (int i = 0; i < gr_applist.getChildCount(); i++) {
-					View v = gr_applist.getChildAt(i);
-					ImageView img_delete = (ImageView) v.findViewById(R.id.img_extramenu_app_delete);
-					img_delete.setImageResource(R.drawable.icon_exit_mini);
-					img_delete.setEnabled(true);
-				}
+				editExtraMenu();
 				return true;
 			}
 		});
@@ -153,13 +135,28 @@ public class ExtraMenu extends LinearLayout{
 						img_delete.setImageResource(R.drawable.blank);
 						img_delete.setEnabled(false);
 					}
+
+					//dissappear add app
+					gr_add_app.setVisibility(View.GONE);
+					rl_background.setBackgroundResource(R.drawable.blank);
+				}else{
+					editExtraMenu();
+
+					//show addview
+					gr_add_app.setVisibility(View.VISIBLE);
+					rl_background.setBackgroundColor(getResources().getColor(android.R.color.white));
 				}
 			}
 		});
+
+		//set appadd gridview
+		setAppAddGridview();
+		//set extramenu on ready state
 		setReady();
 
 	}
 
+	//set extramenu ready to use
 	private void setReady(){
 		btn_etra_edit.setText(BTN_EDIT_SUA);
 		update_applist(exmiAdapter.getItems());
@@ -173,7 +170,14 @@ public class ExtraMenu extends LinearLayout{
 			img_delete.setImageResource(R.drawable.blank);
 			img_delete.setEnabled(false);
 		}
+		//gr_content.setSelection(0);
+
+		//dissappear add app
+		gr_add_app.setVisibility(View.GONE);
+		rl_background.setBackgroundResource(R.drawable.blank);
 	}
+
+	//auto close extramenu
 	private void autoclose(){
 		new Thread(new Runnable() {
 			@Override
@@ -198,19 +202,8 @@ public class ExtraMenu extends LinearLayout{
 			}
 		}).start();
 	}
-	private void setApplistDefault(){
-		PackageManager pm = mContext.getPackageManager();
-		Intent mainIntent = new Intent(Intent.ACTION_MAIN,null);
-		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-		List<ResolveInfo> pacsList = pm.queryIntentActivities(mainIntent, 0);
-		mPacs.clear();
 
-		for(int j=0; j<10; j++){
-			AppInfo p = new AppInfo();
-			p.setInfo(pacsList.get(j), pm);
-			mPacs.add(p);
-		}
-	}
+	//save extramenu applist to file
 	private void saveToFile(){
 		JSONArray js_arr_app = new JSONArray();
 		for(int i=0; i<mPacs.size(); i++){
@@ -240,7 +233,7 @@ public class ExtraMenu extends LinearLayout{
 		}
 	}
 
-
+	//read applist for extramenu from file
 	private void readFromFile(){
 		//Log.i(LOG_TAG, "Start read from file");
 		SharedPreferences pre = mContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
@@ -276,6 +269,67 @@ public class ExtraMenu extends LinearLayout{
 
 	}
 
+	//setup f add gridview
+	private void setAppAddGridview(){
+		final ArrayList<AppInfo> applist = getApplistFromSystem(mContext.getPackageManager(),-1);
+		gr_add_app.setAdapter(new AppAddItemAdapter(mContext, applist));
+
+		//add view to extra menu
+		gr_add_app.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Log.i("LongDT", "onitem add app click");
+				boolean isOnextramenu = false;
+				for(int i = 0; i < mPacs.size(); i++){
+					if(applist.get(position).equal(mPacs.get(i))) {
+						isOnextramenu = true;
+						break;
+					}
+				}
+				if(!isOnextramenu){
+					Log.i("LongDt", "add app success");
+					exmiAdapter.add(0, applist.get(position).clone());
+					mPacs.add(0, applist.get(position).clone());
+				}
+			}
+		});
+	}
+
+	//edit extramenu, delete icon app, sort icon app
+	private void editExtraMenu(){
+		gr_content.startEditMode();
+		btn_etra_edit.setText(BTN_EDIT_XONG);
+		is_autoclose = false;
+
+		//show the delete icon
+		GridView gr_applist = gr_content;
+		for (int i = 0; i < gr_applist.getChildCount(); i++) {
+			View v = gr_applist.getChildAt(i);
+			ImageView img_delete = (ImageView) v.findViewById(R.id.img_extramenu_app_delete);
+			img_delete.setImageResource(R.drawable.icon_exit_mini);
+			img_delete.setEnabled(true);
+		}
+	}
+
+	//get applist from system, if numofapp = -1, get all ap
+	private ArrayList<AppInfo> getApplistFromSystem(PackageManager pm, int numofapp){
+		ArrayList<AppInfo> applist = new ArrayList<AppInfo>();
+		Intent mainIntent = new Intent(Intent.ACTION_MAIN,null);
+		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		List<ResolveInfo> pacsList = pm.queryIntentActivities(mainIntent, 0);
+
+		int num=0;
+		if(numofapp == -1)
+			num = pacsList.size();
+		else
+			num = (numofapp < pacsList.size()) ? numofapp:pacsList.size();
+		for(int i=0; i< num; i++){
+			AppInfo p = new AppInfo();
+			p.setInfo(pacsList.get(i), pm);
+			applist.add(p);
+		}
+		return applist;
+	}
 	public void hide(){
 		setVisibility(LinearLayout.GONE);
 	}
@@ -288,9 +342,12 @@ public class ExtraMenu extends LinearLayout{
 	SlidingDrawer mExtraMenu;
 	ImageView im_hide_show;
 	DynamicGridView gr_content;
+	GridView gr_add_app;
 	//LinearLayout ll_content;
 	LinearLayout llExtraMenu;
+	LinearLayout llAppAdd;
 	Button btn_etra_edit;
+	RelativeLayout rl_background;
 
 	
 	ArrayList<AppInfo> mPacs;
