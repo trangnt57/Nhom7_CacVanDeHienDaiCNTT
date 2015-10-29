@@ -123,7 +123,7 @@ public class ExtraMenu extends LinearLayout{
 			public void onClick(View view) {
 				if (btn_etra_edit.getText().toString().compareTo(BTN_EDIT_XONG) == 0) {
 					btn_etra_edit.setText(BTN_EDIT_SUA);
-					update_applist(exmiAdapter.getItems());
+					//update_applist(exmiAdapter.getItems());
 					saveToFile();
 					gr_content.stopEditMode();
 					is_autoclose = true;
@@ -159,7 +159,7 @@ public class ExtraMenu extends LinearLayout{
 	//set extramenu ready to use
 	private void setReady(){
 		btn_etra_edit.setText(BTN_EDIT_SUA);
-		update_applist(exmiAdapter.getItems());
+		//update_applist(exmiAdapter.getItems());
 		saveToFile();
 		gr_content.stopEditMode();
 
@@ -225,13 +225,13 @@ public class ExtraMenu extends LinearLayout{
 		edit.commit();
 	}
 
-	private void update_applist(List<Object> items){
-		mPacs.clear();
-		for(int i=0; i<items.size(); i++){
-
-			mPacs.add(i, ((AppInfo)(items.get(i))));
-		}
-	}
+//	private void update_applist(List<Object> items){
+//		mPacs.clear();
+//		for(int i=0; i<items.size(); i++){
+//
+//			mPacs.add(i, ((AppInfo)(items.get(i))));
+//		}
+//	}
 
 	//read applist for extramenu from file
 	private void readFromFile(){
