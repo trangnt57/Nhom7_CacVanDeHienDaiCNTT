@@ -3463,7 +3463,7 @@ public class Launcher extends Activity
             if (isWidgetTray) {
                 revealView.setBackground(res.getDrawable(R.drawable.quantum_panel_dark));
             } else {
-                revealView.setBackground(res.getDrawable(R.drawable.sky));
+                revealView.setBackground(res.getDrawable(R.drawable.bg_blue_gradient));
             }
 
             // Hide the real page background, and swap in the fake one
@@ -3716,7 +3716,7 @@ public class Launcher extends Activity
                 if (isWidgetTray) {
                     revealView.setBackground(res.getDrawable(R.drawable.quantum_panel_dark));
                 } else {
-                    revealView.setBackground(res.getDrawable(R.drawable.sky));
+                    revealView.setBackground(res.getDrawable(R.drawable.bg_blue_gradient));
                 }
 
                 int width = revealView.getMeasuredWidth();

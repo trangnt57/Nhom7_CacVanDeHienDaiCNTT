@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="none"
         android:text="@string/application_name"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/item_app_text_size" />
 
 </LinearLayout>

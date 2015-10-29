@@ -25,19 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/editTextFilterApps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableRight="@android:drawable/ic_menu_search"
-            android:imeOptions="flagNoExtractUi|actionSearch"
-            android:inputType="textVisiblePassword|textNoSuggestions"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:textSize="16sp"
-            android:background="@android:color/holo_blue_dark"/>
+        android:orientation="vertical"
+        android:background="@drawable/bg_blue_gradient">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -72,5 +61,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
+
+        <EditText
+            android:id="@+id/editTextFilterApps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@android:drawable/ic_menu_search"
+            android:imeOptions="flagNoExtractUi|actionSearch"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 </g7.bluesky.launcher3.AppsCustomizeTabHost>
