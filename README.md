@@ -9,6 +9,8 @@
 	* Lê Xuân Đạo
 * **Tham khảo**: 
 	* Build Launcher3 với Android Studio:  [fookwood/Launcher3](https://github.com/fookwood/Launcher3/)
+* **Thư viện**: 
+	* [yanchenko/droidparts](https://github.com/yanchenko/droidparts)
 * **License**
 	* [Apache License V2] (LICENSE.md)
 
