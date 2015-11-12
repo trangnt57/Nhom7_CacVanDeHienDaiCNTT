@@ -29,9 +29,9 @@
 
     <color name="appwidget_error_color">#FCCC</color>
 
-    <color name="workspace_icon_text_color">#FFF</color>
+    <color name="workspace_icon_text_color">#FFFFFF</color>
 
-    <color name="quantum_panel_text_color">#FF666666</color>
+    <color name="quantum_panel_text_color">#000000</color>
     <color name="quantum_panel_text_shadow_color">#FFC4C4C4</color>
     <color name="outline_color">#FFFFFFFF</color>
     <color name="widget_text_panel">#FF374248</color>

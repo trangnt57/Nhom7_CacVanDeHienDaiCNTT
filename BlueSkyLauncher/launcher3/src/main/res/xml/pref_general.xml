@@ -2,6 +2,14 @@
 
     <PreferenceCategory android:title="@string/pref_category_ui">
         <ListPreference
+            android:key="app_layout"
+            android:title="@string/app_layout"
+            android:defaultValue="0"
+            android:entries="@array/app_layout_titles"
+            android:entryValues="@array/app_layout_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <ListPreference
             android:key="app_theme"
             android:title="@string/app_theme"
             android:defaultValue="0"
@@ -10,11 +18,19 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
         <ListPreference
-            android:key="app_layout"
-            android:title="@string/app_layout"
-            android:defaultValue="0"
-            android:entries="@array/app_layout_titles"
-            android:entryValues="@array/app_layout_values"
+            android:key="app_theme_opacity"
+            android:title="@string/app_theme_opacity"
+            android:defaultValue="255"
+            android:entries="@array/app_theme_opacity_titles"
+            android:entryValues="@array/app_theme_opacity_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <ListPreference
+            android:key="app_text_color"
+            android:title="@string/app_text_color"
+            android:defaultValue="#000000"
+            android:entries="@array/app_text_color_titles"
+            android:entryValues="@array/app_text_color_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
     </PreferenceCategory>

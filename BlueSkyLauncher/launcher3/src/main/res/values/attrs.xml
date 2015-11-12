@@ -144,4 +144,5 @@
 
     <!-- Use in AppsListView -->
     <attr name="appListViewBackground" format="reference|color"/>
+    <attr name="customTextColor" format="reference|color"/>
 </resources>

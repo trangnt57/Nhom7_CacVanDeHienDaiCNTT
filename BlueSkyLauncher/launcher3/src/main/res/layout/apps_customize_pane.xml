@@ -27,17 +27,21 @@
         android:clipChildren="false"
         android:orientation="vertical">
 
-        <EditText
+        <org.droidparts.widget.ClearableEditText
             android:id="@+id/editTextFilterApps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableRight="@android:drawable/ic_menu_search"
+            android:drawableLeft="@android:drawable/ic_menu_search"
             android:imeOptions="flagNoExtractUi|actionSearch"
             android:inputType="textVisiblePassword|textNoSuggestions"
-            android:padding="8dp"
+            android:padding="4dp"
             android:singleLine="true"
             android:textSize="16sp"
-            android:background="@android:color/holo_blue_dark"/>
+            android:background="@android:color/transparent"
+            android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
+            android:drawablePadding="4dp"/>
+
+        <include layout="@layout/white_horizontal_line"  />
 
         <FrameLayout
             android:layout_width="match_parent"
