@@ -124,8 +124,10 @@ public class SettingsActivity extends PreferenceActivity {
 
             addPreferencesFromResource(R.xml.pref_general);
 
-            bindPreferenceSummaryToValue(findPreference("app_layout"));
-            bindPreferenceSummaryToValue(findPreference("app_theme"));
+            bindPreferenceSummaryToValue(findPreference(SettingConstants.LAYOUT_PREF_KEY));
+            bindPreferenceSummaryToValue(findPreference(SettingConstants.THEME_PREF_KEY));
+            bindPreferenceSummaryToValue(findPreference(SettingConstants.TEXT_COLOR_PREF_KEY));
+            bindPreferenceSummaryToValue(findPreference(SettingConstants.THEME_OPACITY_PREF_KEY));
         }
     }
 }

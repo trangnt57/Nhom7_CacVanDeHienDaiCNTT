@@ -1,6 +1,6 @@
 <resources>
     <string name="title_activity_settings">Cài đặt</string>
-    <string name="pref_category_ui">Giao diện</string>
+    <string name="pref_category_ui">Cài đặt</string>
 
     <!-- Strings related to Settings -->
 
@@ -22,17 +22,37 @@
     <string name="app_theme">Theme</string>
     <string-array name="app_theme_titles">
         <item>BlueSky</item>
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Transparent</item>
-        <item>Semi-Transparent</item>
+        <item>Blue</item>
+        <item>Green</item>
     </string-array>
     <string-array name="app_theme_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
-        <item>3</item>
-        <item>4</item>
+    </string-array>
+
+    <!-- Theme Opacity -->
+    <string name="app_theme_opacity">Độ trong suốt</string>
+    <string-array name="app_theme_opacity_titles">
+        <item>Trong suốt</item>
+        <item>Nửa trong suốt</item>
+        <item>Không trong suốt</item>
+    </string-array>
+    <string-array name="app_theme_opacity_values">
+        <item>0</item>
+        <item>100</item>
+        <item>255</item>
+    </string-array>
+
+    <!-- Theme Text color -->
+    <string name="app_text_color">Màu chữ</string>
+    <string-array name="app_text_color_titles">
+        <item>Trắng</item>
+        <item>Đen</item>
+    </string-array>
+    <string-array name="app_text_color_values">
+        <item>#FFFFFF</item>
+        <item>#000000</item>
     </string-array>
     
 </resources>

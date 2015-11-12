@@ -18,6 +18,8 @@ package g7.bluesky.launcher3;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +74,12 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
     protected void onFinishInflate() {
         mPagedView = (AppsCustomizePagedView) findViewById(R.id.apps_customize_pane_content);
         mContent = findViewById(R.id.content);
+    }
+
+    public void setBackground(Drawable d) {
+        if (mContent != null) {
+            mContent.setBackground(d);
+        }
     }
 
     public String getContentTag() {

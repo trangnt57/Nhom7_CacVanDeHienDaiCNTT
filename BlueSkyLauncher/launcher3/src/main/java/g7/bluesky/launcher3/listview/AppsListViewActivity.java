@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,12 +40,26 @@ public class AppsListViewActivity extends AppCompatActivity {
     private UserManagerCompat mUserManager;
     private AppsListAdapter appListAdapter;
 
+    public AppsListViewActivity() {
+        super();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apps_list_view);
         ListView listView = (ListView) findViewById(R.id.list_view);
         EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
+
+        int textColor = getResources().getColor(R.color.quantum_panel_text_color);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            textColor = extras.getInt("TEXT_COLOR", getResources().getColor(R.color.quantum_panel_text_color));
+        }
+
+        inputSearch.setTextColor(textColor);
+
         listApps = new ArrayList<>();
 
         // Adding items to listview
@@ -72,6 +87,7 @@ public class AppsListViewActivity extends AppCompatActivity {
 
         appListAdapter = new AppsListAdapter(getBaseContext(), listApps);
         listView.setAdapter(appListAdapter);
+        appListAdapter.setTextColor(textColor);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -56,6 +56,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -68,6 +69,7 @@ import android.os.StrictMode;
 import android.os.SystemClock;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
@@ -102,20 +104,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import g7.bluesky.launcher3.DropTarget.DragObject;
-import g7.bluesky.launcher3.ExTraMenu.ExtraMenu;
-import g7.bluesky.launcher3.PagedView.PageSwitchListener;
-import g7.bluesky.launcher3.compat.AppWidgetManagerCompat;
-import g7.bluesky.launcher3.compat.LauncherActivityInfoCompat;
-import g7.bluesky.launcher3.compat.LauncherAppsCompat;
-import g7.bluesky.launcher3.compat.PackageInstallerCompat;
-import g7.bluesky.launcher3.compat.PackageInstallerCompat.PackageInstallInfo;
-import g7.bluesky.launcher3.compat.UserHandleCompat;
-import g7.bluesky.launcher3.compat.UserManagerCompat;
-import g7.bluesky.launcher3.listview.AppsListViewActivity;
-import g7.bluesky.launcher3.setting.SettingConstants;
-import g7.bluesky.launcher3.setting.SettingsActivity;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -135,6 +123,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import g7.bluesky.launcher3.DropTarget.DragObject;
+import g7.bluesky.launcher3.ExTraMenu.ExtraMenu;
+import g7.bluesky.launcher3.PagedView.PageSwitchListener;
+import g7.bluesky.launcher3.compat.AppWidgetManagerCompat;
+import g7.bluesky.launcher3.compat.LauncherActivityInfoCompat;
+import g7.bluesky.launcher3.compat.LauncherAppsCompat;
+import g7.bluesky.launcher3.compat.PackageInstallerCompat;
+import g7.bluesky.launcher3.compat.PackageInstallerCompat.PackageInstallInfo;
+import g7.bluesky.launcher3.compat.UserHandleCompat;
+import g7.bluesky.launcher3.compat.UserManagerCompat;
+import g7.bluesky.launcher3.listview.AppsListViewActivity;
+import g7.bluesky.launcher3.setting.SettingConstants;
+import g7.bluesky.launcher3.setting.SettingsActivity;
 
 /**
  * Default launcher application.
@@ -228,6 +230,7 @@ public class Launcher extends Activity
     private static final String QSB_WIDGET_PROVIDER = "qsb_widget_provider";
 
     public static final String USER_HAS_MIGRATED = "launcher.user_migrated_from_old_data";
+    private Intent appsListViewIntent;
 
     /** The different states that Launcher can be in. */
     private enum State { NONE, WORKSPACE, APPS_CUSTOMIZE, APPS_CUSTOMIZE_SPRING_LOADED };
@@ -357,6 +360,11 @@ public class Launcher extends Activity
      * Preferences from @see #SettingsActivity
      */
     private SharedPreferences defaultSharedPref;
+
+    /**
+     * Current drawable get from Preferences to set background
+     */
+    private Drawable currentBgDrawable;
 
     private static ArrayList<ComponentName> mIntentsOnWorkspaceFromUpgradePath = null;
 
@@ -532,8 +540,6 @@ public class Launcher extends Activity
 //            }
 //
 //        });
-
-        editTextFilterApps = (EditText) findViewById(R.id.editTextFilterApps);
 
         editTextFilterApps.addTextChangedListener(new TextWatcher() {
 
@@ -1506,6 +1512,15 @@ public class Launcher extends Activity
         mAppsCustomizeContent = (AppsCustomizePagedView)
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
         mAppsCustomizeContent.setup(this, dragController);
+
+        // Set up list view
+        appsListViewIntent = new Intent(this, AppsListViewActivity.class);
+
+        // Set up filter input text
+        editTextFilterApps = (EditText) findViewById(R.id.editTextFilterApps);
+
+        // Set custom theme
+        setCustomTheme();
 
         // Setup the drag controller (drop targets have to be added in reverse order in priority)
         dragController.setDragScoller(mWorkspace);
@@ -2697,8 +2712,8 @@ public class Launcher extends Activity
         if (isAllAppsVisible()) {
             showWorkspace(true);
         } else {
-            if (defaultSharedPref.getString("app_layout", SettingConstants.LAUNCHER_GRID_LAYOUT).equals(SettingConstants.LAUNCHER_LIST_LAYOUT)) {
-                Intent appsListViewIntent = new Intent(this, AppsListViewActivity.class);
+            if (defaultSharedPref.getString(SettingConstants.LAYOUT_PREF_KEY, SettingConstants.LAUNCHER_GRID_LAYOUT).equals(SettingConstants.LAUNCHER_LIST_LAYOUT)) {
+                setCustomTheme();
                 startActivity(appsListViewIntent);
             } else {
                 // Show filter in Apps view
@@ -2706,13 +2721,45 @@ public class Launcher extends Activity
                 // Reset filter
                editTextFilterApps.setText("");
 
-
                 showAllApps(true, AppsCustomizePagedView.ContentType.Applications, false);
+                setCustomTheme();
             }
         }
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onClickAllAppsButton(v);
         }
+    }
+
+    private void setCustomTheme() {
+        String themeId = defaultSharedPref.getString(SettingConstants.THEME_PREF_KEY, SettingConstants.LAUNCHER_GRID_LAYOUT);
+        switch (themeId) {
+            default:
+                currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.sky);
+                mAppsCustomizeTabHost.setBackground(currentBgDrawable);
+                break;
+            case SettingConstants.BLUE_THEME:
+                currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.bg_blue_gradient);
+                mAppsCustomizeTabHost.setBackground(currentBgDrawable);
+                break;
+            case SettingConstants.GREEN_THEME:
+                currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.bg_green_gradient);
+                mAppsCustomizeTabHost.setBackground(currentBgDrawable);
+                break;
+        }
+
+        String themeOpacity = defaultSharedPref.getString(SettingConstants.THEME_OPACITY_PREF_KEY, "255");
+        try {
+            currentBgDrawable.setAlpha(Integer.valueOf(themeOpacity));
+        } catch (NumberFormatException ne) {
+            currentBgDrawable.setAlpha(255);
+        }
+
+        String appTextColor = defaultSharedPref.getString(SettingConstants.TEXT_COLOR_PREF_KEY, "#000000");
+        int textColor = Color.parseColor(appTextColor);
+        mAppsCustomizeContent.setTextColor(textColor);
+        editTextFilterApps.setTextColor(textColor);
+
+        appsListViewIntent.putExtra("TEXT_COLOR", textColor);
     }
 
     private void showBrokenAppInstallDialog(final String packageName,
@@ -3461,9 +3508,9 @@ public class Launcher extends Activity
 
             final boolean isWidgetTray = contentType == AppsCustomizePagedView.ContentType.Widgets;
             if (isWidgetTray) {
-                revealView.setBackground(res.getDrawable(R.drawable.quantum_panel_dark));
+                revealView.setBackground(ContextCompat.getDrawable(this, R.drawable.quantum_panel_dark));
             } else {
-                revealView.setBackground(res.getDrawable(R.drawable.bg_blue_gradient));
+                revealView.setBackground(currentBgDrawable);
             }
 
             // Hide the real page background, and swap in the fake one
@@ -3714,9 +3761,9 @@ public class Launcher extends Activity
                         contentType == AppsCustomizePagedView.ContentType.Widgets;
 
                 if (isWidgetTray) {
-                    revealView.setBackground(res.getDrawable(R.drawable.quantum_panel_dark));
+                    revealView.setBackground(ContextCompat.getDrawable(this, R.drawable.quantum_panel_dark));
                 } else {
-                    revealView.setBackground(res.getDrawable(R.drawable.bg_blue_gradient));
+                    revealView.setBackground(currentBgDrawable);
                 }
 
                 int width = revealView.getMeasuredWidth();

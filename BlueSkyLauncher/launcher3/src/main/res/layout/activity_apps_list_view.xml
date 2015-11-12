@@ -5,6 +5,26 @@
     android:orientation="vertical"
     android:background="@drawable/bg_blue_gradient">
 
+    <org.droidparts.widget.ClearableEditText
+        android:id="@+id/inputSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:imeOptions="flagNoExtractUi|actionSearch"
+        android:inputType="textVisiblePassword|textNoSuggestions"
+        android:padding="4dp"
+        android:singleLine="true"
+        android:textSize="16sp"
+        android:textCursorDrawable="@null"
+        android:textColor="@color/quantum_panel_text_color"
+        android:background="@android:color/transparent"
+        android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
+        android:drawablePadding="4dp">
+        <requestFocus />
+    </org.droidparts.widget.ClearableEditText>
+
+    <include layout="@layout/white_horizontal_line"  />
+
     <!-- List View -->
     <ListView
         android:id="@+id/list_view"
@@ -15,19 +35,4 @@
         android:divider="@android:drawable/divider_horizontal_dark"
         android:dividerHeight="1dp" />
 
-    <EditText
-        android:id="@+id/inputSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableRight="@android:drawable/ic_menu_search"
-        android:imeOptions="flagNoExtractUi|actionSearch"
-        android:inputType="textVisiblePassword|textNoSuggestions"
-        android:padding="8dp"
-        android:singleLine="true"
-        android:textSize="16sp"
-        android:textCursorDrawable="@null"
-        android:textColor="@android:color/white"
-        android:background="@android:color/transparent">
-        <requestFocus />
-    </EditText>
 </LinearLayout>

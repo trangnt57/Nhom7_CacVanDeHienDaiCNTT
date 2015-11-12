@@ -26,12 +26,22 @@ public class AppsListAdapter extends ArrayAdapter<AppInfo> implements Filterable
     private Filter appListFilter;
     private List<AppInfo> appList;
     private List<AppInfo> originalAppList;
+    private int textColor;
+
+    public int getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
+    }
 
     public AppsListAdapter(Context context, List<AppInfo> appList) {
         super(context, R.layout.app_list_item, appList);
         this.appList = appList;
         this.originalAppList = appList;
         this.context = context;
+        textColor = getContext().getResources().getColor(R.color.quantum_panel_text_color);
     }
 
     @Override
@@ -72,6 +82,7 @@ public class AppsListAdapter extends ArrayAdapter<AppInfo> implements Filterable
         // Populate the data into the template view using the data object
         viewHolder.iconView.setImageDrawable(app.getIconDrawable());
         viewHolder.appName.setText(app.getTitle());
+        viewHolder.appName.setTextColor(textColor);
         // Return the completed view to render on screen
         return convertView;
     }

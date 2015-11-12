@@ -28,6 +28,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -211,6 +212,8 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     private boolean mInBulkBind;
     private boolean mNeedToUpdatePageCountsAndInvalidateData;
 
+    private int textColor;
+
     public AppsCustomizePagedView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mLayoutInflater = LayoutInflater.from(context);
@@ -238,6 +241,15 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         setSinglePageInViewport();
     }
 
+    public int getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
+        invalidateOnDataChange();
+    }
+
     @Override
     protected void init() {
         super.init();
@@ -246,6 +258,8 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         Context context = getContext();
         Resources r = context.getResources();
         setDragSlopeThreshold(r.getInteger(R.integer.config_appsCustomizeDragSlopeThreshold)/100f);
+
+        setTextColor(getResources().getColor(R.color.quantum_panel_text_color));
     }
 
     public void onFinishInflate() {
@@ -927,11 +941,11 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         int heightSpec = MeasureSpec.makeMeasureSpec(mContentHeight, MeasureSpec.AT_MOST);
         layout.measure(widthSpec, heightSpec);
 
-        Drawable bg = getContext().getResources().getDrawable(R.drawable.bg_blue_gradient);
+        /*Drawable bg = getContext().getResources().getDrawable(R.drawable.bg_blue_gradient);
         if (bg != null) {
             bg.setAlpha(mPageBackgroundsVisible ? 255 : 0);
-            //layout.setBackground(bg);
-        }
+            layout.setBackground(bg);
+        }*/
 
         setVisibilityOnChildren(layout, View.VISIBLE);
     }
@@ -962,6 +976,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             AppInfo info = mApps.get(i);
             BubbleTextView icon = (BubbleTextView) mLayoutInflater.inflate(
                     R.layout.apps_customize_application, layout, false);
+            icon.setTextColor(textColor);
             icon.applyFromApplicationInfo(info);
             icon.setOnClickListener(mLauncher);
             icon.setOnLongClickListener(this);
