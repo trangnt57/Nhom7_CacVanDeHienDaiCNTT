@@ -30,3 +30,7 @@
        * Tạo thêm theme cho launcher, thiết kế lại màu sắc, hình ảnh, biểu tượng
        * Thiết lập hiệu ứng animation
        * ...
+
+---
+#### :white_check_mark: 12/11/2015
+   * Thêm theme cho launcher, chỉnh lại giao diện filter, màu sắc
