@@ -2,8 +2,10 @@ package g7.bluesky.launcher3.listview;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -52,11 +54,15 @@ public class AppsListViewActivity extends AppCompatActivity {
         EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
 
         int textColor = getResources().getColor(R.color.quantum_panel_text_color);
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.sky);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             textColor = extras.getInt("TEXT_COLOR", getResources().getColor(R.color.quantum_panel_text_color));
+            drawable = ContextCompat.getDrawable(this, extras.getInt("BG_DRAWABLE_ID", R.drawable.sky));
         }
+
+        listView.getRootView().setBackground(drawable);
 
         inputSearch.setTextColor(textColor);
 

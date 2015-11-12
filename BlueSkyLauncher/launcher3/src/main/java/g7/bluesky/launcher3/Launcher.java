@@ -2736,14 +2736,17 @@ public class Launcher extends Activity
             default:
                 currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.sky);
                 mAppsCustomizeTabHost.setBackground(currentBgDrawable);
+                appsListViewIntent.putExtra("BG_DRAWABLE_ID", R.drawable.sky);
                 break;
             case SettingConstants.BLUE_THEME:
                 currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.bg_blue_gradient);
                 mAppsCustomizeTabHost.setBackground(currentBgDrawable);
+                appsListViewIntent.putExtra("BG_DRAWABLE_ID", R.drawable.bg_blue_gradient);
                 break;
             case SettingConstants.GREEN_THEME:
                 currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.bg_green_gradient);
                 mAppsCustomizeTabHost.setBackground(currentBgDrawable);
+                appsListViewIntent.putExtra("BG_DRAWABLE_ID", R.drawable.bg_green_gradient);
                 break;
         }
 
