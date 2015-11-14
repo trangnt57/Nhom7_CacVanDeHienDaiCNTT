@@ -103,6 +103,8 @@
 
     <style name="AppsListViewTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="appListViewBackground">@drawable/sky</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
 </resources>

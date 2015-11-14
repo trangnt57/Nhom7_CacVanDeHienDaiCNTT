@@ -169,6 +169,8 @@ public class Launcher extends Activity
     private static final int REQUEST_BIND_APPWIDGET = 11;
     private static final int REQUEST_RECONFIGURE_APPWIDGET = 12;
 
+    private static final int REQUEST_APP_LIST_VIEW = 13;
+
     /**
      * IntentStarter uses request codes starting with this. This must be greater than all activity
      * request codes used internally.
@@ -823,8 +825,19 @@ public class Launcher extends Activity
 
     private void handleActivityResult(
             final int requestCode, final int resultCode, final Intent data) {
+
         // Reset the startActivity waiting flag
         setWaitingForResult(false);
+
+        if (requestCode == REQUEST_APP_LIST_VIEW) {
+            String themeOpacity = defaultSharedPref.getString(SettingConstants.THEME_OPACITY_PREF_KEY, "255");
+            // if theme is not opaque => workspace is shown => no need to show again
+            if (mWorkspace != null && ! themeOpacity.equals("255")) {
+                mWorkspace.show();
+            }
+            return;
+        }
+
         final int pendingAddWidgetId = mPendingAddWidgetId;
         mPendingAddWidgetId = -1;
 
@@ -2714,7 +2727,15 @@ public class Launcher extends Activity
         } else {
             if (defaultSharedPref.getString(SettingConstants.LAYOUT_PREF_KEY, SettingConstants.LAUNCHER_GRID_LAYOUT).equals(SettingConstants.LAUNCHER_LIST_LAYOUT)) {
                 setCustomTheme();
-                startActivity(appsListViewIntent);
+
+                String themeOpacity = defaultSharedPref.getString(SettingConstants.THEME_OPACITY_PREF_KEY, "255");
+
+                // Hide workspace if theme is not opaque
+                if (mWorkspace != null && ! themeOpacity.equals("255")) {
+                    mWorkspace.hide();
+                }
+                startActivityForResult(appsListViewIntent, REQUEST_APP_LIST_VIEW);
+
             } else {
                 // Show filter in Apps view
                 editTextFilterApps.setVisibility(View.VISIBLE);
@@ -2735,26 +2756,27 @@ public class Launcher extends Activity
         switch (themeId) {
             default:
                 currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.sky);
-                mAppsCustomizeTabHost.setBackground(currentBgDrawable);
                 appsListViewIntent.putExtra("BG_DRAWABLE_ID", R.drawable.sky);
                 break;
             case SettingConstants.BLUE_THEME:
                 currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.bg_blue_gradient);
-                mAppsCustomizeTabHost.setBackground(currentBgDrawable);
                 appsListViewIntent.putExtra("BG_DRAWABLE_ID", R.drawable.bg_blue_gradient);
                 break;
             case SettingConstants.GREEN_THEME:
                 currentBgDrawable = ContextCompat.getDrawable(this, R.drawable.bg_green_gradient);
-                mAppsCustomizeTabHost.setBackground(currentBgDrawable);
                 appsListViewIntent.putExtra("BG_DRAWABLE_ID", R.drawable.bg_green_gradient);
                 break;
         }
 
+        mAppsCustomizeTabHost.setBackground(currentBgDrawable);
+
         String themeOpacity = defaultSharedPref.getString(SettingConstants.THEME_OPACITY_PREF_KEY, "255");
         try {
             currentBgDrawable.setAlpha(Integer.valueOf(themeOpacity));
+            appsListViewIntent.putExtra("BG_OPACITY", Integer.valueOf(themeOpacity));
         } catch (NumberFormatException ne) {
             currentBgDrawable.setAlpha(255);
+            appsListViewIntent.putExtra("BG_OPACITY", 255);
         }
 
         String appTextColor = defaultSharedPref.getString(SettingConstants.TEXT_COLOR_PREF_KEY, "#000000");
