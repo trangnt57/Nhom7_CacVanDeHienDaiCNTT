@@ -2205,29 +2205,6 @@ public class Workspace extends SmoothPagedView
         }
     }
 
-    private void setAllCellAlpha(float alpha) {
-        for (CellLayout cl: getWorkspaceAndHotseatCellLayouts()) {
-            cl.setShortcutAndWidgetAlpha(alpha);
-        }
-        getPageIndicator().setAlpha(alpha);
-    }
-
-    /**
-     * Hide workspace
-     */
-    public void hide() {
-        setState(State.NORMAL_HIDDEN);
-        setAllCellAlpha(0f);
-    }
-
-    /**
-     * Show workspace
-     */
-    public void show() {
-        setState(State.NORMAL);
-        setAllCellAlpha(255f);
-    }
-
     private void setState(State state) {
         mState = state;
         updateInteractionForState();

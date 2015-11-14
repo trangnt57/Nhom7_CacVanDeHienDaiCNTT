@@ -833,7 +833,7 @@ public class Launcher extends Activity
             String themeOpacity = defaultSharedPref.getString(SettingConstants.THEME_OPACITY_PREF_KEY, "255");
             // if theme is not opaque => workspace is shown => no need to show again
             if (mWorkspace != null && ! themeOpacity.equals("255")) {
-                mWorkspace.show();
+                showWorkspaceSearchAndHotseat();
             }
             return;
         }
@@ -2732,7 +2732,7 @@ public class Launcher extends Activity
 
                 // Hide workspace if theme is not opaque
                 if (mWorkspace != null && ! themeOpacity.equals("255")) {
-                    mWorkspace.hide();
+                    hideWorkspaceSearchAndHotseat();
                 }
                 startActivityForResult(appsListViewIntent, REQUEST_APP_LIST_VIEW);
 
