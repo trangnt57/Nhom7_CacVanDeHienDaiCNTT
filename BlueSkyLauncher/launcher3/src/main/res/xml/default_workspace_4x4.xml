@@ -42,17 +42,29 @@
         launcher:screen="2"
         launcher:x="0"
         launcher:y="3" />
+    <favorite
+        launcher:packageName="com.android.music"
+        launcher:className="com.android.music.MusicBrowserActivity"
+        launcher:screen="2"
+        launcher:x="1"
+        launcher:y="3" />
 
     <!-- Right screen [3] -->
     <favorite
         launcher:packageName="g7.bluesky.gallery3d"
         launcher:className="g7.bluesky.gallery3d.app.Gallery"
         launcher:screen="3"
-        launcher:x="1"
+        launcher:x="0"
         launcher:y="3" />
     <favorite
         launcher:packageName="com.android.settings"
         launcher:className="com.android.settings.Settings"
+        launcher:screen="3"
+        launcher:x="1"
+        launcher:y="3" />
+    <favorite
+        launcher:packageName="com.android.vending"
+        launcher:className="com.android.vending.AssetBrowserActivity"
         launcher:screen="3"
         launcher:x="2"
         launcher:y="3" />
