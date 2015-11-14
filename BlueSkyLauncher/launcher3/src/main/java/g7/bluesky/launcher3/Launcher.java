@@ -2982,11 +2982,17 @@ public class Launcher extends Activity
      */
     protected void onClickSettingsButton(View v) {
         if (LOGD) Log.d(TAG, "onClickSettingsButton");
+
+        if (mWorkspace != null) {
+            mWorkspace.exitOverviewMode(false);
+        }
+
         final Intent settingsActivity = new Intent(this, SettingsActivity.class);
         // Use only one setting fragment
         settingsActivity.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName() );
         settingsActivity.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
         startActivity(settingsActivity);
+
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onClickSettingsButton(v);
         }

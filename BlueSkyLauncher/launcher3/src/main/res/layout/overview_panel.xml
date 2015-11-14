@@ -31,7 +31,7 @@
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_horizontal"
         android:text="@string/wallpaper_button_text"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:textSize="12sp" />
 
     <TextView
@@ -44,7 +44,7 @@
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_horizontal"
         android:text="@string/widget_button_text"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:textSize="12sp" />
 
     <TextView
@@ -57,7 +57,7 @@
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_horizontal"
         android:text="@string/settings_button_text"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:textSize="12sp" />
 
 </LinearLayout>
