@@ -39,6 +39,6 @@
 
 ---
 #### :white_check_mark: 27/11/2015
-	* Sửa lại bộ lọc với Tiếng Việt
-	* Sửa theme mặc định
-	* Thêm tùy chọn sắp xếp ứng dụng theo A-Z, Z-A hoặc theo tần suất sử dụng
+   * Sửa lại bộ lọc với Tiếng Việt
+   * Sửa theme mặc định
+   * Thêm tùy chọn sắp xếp ứng dụng theo A-Z, Z-A hoặc theo tần suất sử dụng
