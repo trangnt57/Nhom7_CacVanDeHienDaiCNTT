@@ -4,25 +4,38 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <org.droidparts.widget.ClearableEditText
-        android:id="@+id/inputSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@android:drawable/ic_menu_search"
-        android:imeOptions="flagNoExtractUi|actionSearch"
-        android:inputType="textVisiblePassword|textNoSuggestions"
-        android:padding="4dp"
-        android:singleLine="true"
-        android:textSize="16sp"
-        android:textCursorDrawable="@null"
-        android:textColor="@color/quantum_panel_text_color"
-        android:background="@android:color/transparent"
-        android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
-        android:drawablePadding="4dp">
-        <requestFocus />
-    </org.droidparts.widget.ClearableEditText>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
-    <include layout="@layout/white_horizontal_line"  />
+        <org.droidparts.widget.ClearableEditText
+            android:id="@+id/inputSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@android:drawable/ic_menu_search"
+            android:drawablePadding="4dp"
+            android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
+            android:imeOptions="flagNoExtractUi|actionSearch"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:textColor="@color/quantum_panel_text_color"
+            android:textCursorDrawable="@null"
+            android:textSize="16sp">
+
+            <requestFocus />
+        </org.droidparts.widget.ClearableEditText>
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_swap_vertical" />
+    </LinearLayout>
+
+    <include layout="@layout/white_horizontal_line" />
 
     <!-- List View -->
     <ListView

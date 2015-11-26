@@ -171,4 +171,9 @@ public class AppInfo extends ItemInfo {
     public void setIconDrawable(Drawable iconDrawable) {
         this.iconDrawable = iconDrawable;
     }
+
+    /**
+     * App launched times
+     */
+    public transient Integer launchTimes = 0;
 }

@@ -98,10 +98,14 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Advanceable;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.DataInputStream;
@@ -137,6 +141,7 @@ import g7.bluesky.launcher3.compat.UserManagerCompat;
 import g7.bluesky.launcher3.listview.AppsListViewActivity;
 import g7.bluesky.launcher3.setting.SettingConstants;
 import g7.bluesky.launcher3.setting.SettingsActivity;
+import g7.bluesky.launcher3.util.LauncherUtil;
 import g7.bluesky.launcher3.util.StringUtil;
 
 /**
@@ -576,6 +581,45 @@ public class Launcher extends Activity
                 }
             }
         });
+
+        // Spinner element
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Clear spinner text
+                ((TextView) view).setText(null);
+
+                SharedPreferences.Editor editor = defaultSharedPref.edit();
+                editor.putInt(SettingConstants.SORT_PREF_KEY, position);
+                editor.apply();
+
+                // Value from preference
+                int prefVal = defaultSharedPref.getInt(SettingConstants.SORT_PREF_KEY, SettingConstants.SORT_A_Z);
+                LauncherUtil.sortListApps(defaultSharedPref, listApps, prefVal);
+                mAppsCustomizeContent.invalidatePageData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // Creating adapter for spinner
+        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this, R.array.sort_options, android.R.layout.simple_spinner_item);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+
+        // Set default value
+        final int prefSortOptionVal = defaultSharedPref.getInt(SettingConstants.SORT_PREF_KEY, SettingConstants.SORT_A_Z);
+        spinner.setSelection(prefSortOptionVal);
 
     }
 
@@ -2782,7 +2826,7 @@ public class Launcher extends Activity
             appsListViewIntent.putExtra("BG_OPACITY", 255);
         }
 
-        String appTextColor = defaultSharedPref.getString(SettingConstants.TEXT_COLOR_PREF_KEY, "#000000");
+        String appTextColor = defaultSharedPref.getString(SettingConstants.TEXT_COLOR_PREF_KEY, "#FFFFFF");
         int textColor = Color.parseColor(appTextColor);
         mAppsCustomizeContent.setTextColor(textColor);
         editTextFilterApps.setTextColor(textColor);
@@ -2872,8 +2916,10 @@ public class Launcher extends Activity
         Object tag = v.getTag();
         final ShortcutInfo shortcut;
         final Intent intent;
+        String prefKey;
         if (tag instanceof ShortcutInfo) {
             shortcut = (ShortcutInfo) tag;
+            prefKey = shortcut.getTargetComponent().getClassName();
             intent = shortcut.intent;
             int[] pos = new int[2];
             v.getLocationOnScreen(pos);
@@ -2883,9 +2929,13 @@ public class Launcher extends Activity
         } else if (tag instanceof AppInfo) {
             shortcut = null;
             intent = ((AppInfo) tag).intent;
+            prefKey = ((AppInfo) tag).getComponentName().getClassName();
         } else {
             throw new IllegalArgumentException("Input must be a Shortcut or AppInfo");
         }
+
+        // Count app launch times
+        LauncherUtil.increaseAppLaunchTimes(defaultSharedPref, prefKey);
 
         boolean success = startActivitySafely(v, intent, tag);
         mStats.recordLaunch(intent, shortcut);
@@ -4791,6 +4841,19 @@ public class Launcher extends Activity
             }
         } else {
             if (mAppsCustomizeContent != null) {
+                // Count app launch times: Init
+                SharedPreferences.Editor prefEditor = defaultSharedPref.edit();
+                for (AppInfo appInfo: apps) {
+                    String prefKey = appInfo.getComponentName().getClassName();
+                    if (defaultSharedPref.getInt(prefKey, -1) == -1) {
+                        prefEditor.putInt(prefKey, 0);
+                    }
+                }
+                prefEditor.apply();
+
+                int sortOption = defaultSharedPref.getInt(SettingConstants.SORT_PREF_KEY, SettingConstants.SORT_A_Z);
+                LauncherUtil.sortListApps(defaultSharedPref, apps, sortOption);
+
                 mAppsCustomizeContent.setApps(apps);
                 this.listApps = apps;
                 mAppsCustomizeContent.onPackagesUpdated(

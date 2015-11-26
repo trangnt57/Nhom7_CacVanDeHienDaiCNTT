@@ -55,4 +55,11 @@
         <item>#000000</item>
     </string-array>
 
+    <!-- Sorting option -->
+    <string-array name="sort_options">
+        <item>A-Z</item>
+        <item>Z-A</item>
+        <item>Most used</item>
+    </string-array>
+
 </resources>
