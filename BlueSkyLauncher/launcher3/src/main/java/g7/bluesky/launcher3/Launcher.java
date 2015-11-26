@@ -137,6 +137,7 @@ import g7.bluesky.launcher3.compat.UserManagerCompat;
 import g7.bluesky.launcher3.listview.AppsListViewActivity;
 import g7.bluesky.launcher3.setting.SettingConstants;
 import g7.bluesky.launcher3.setting.SettingsActivity;
+import g7.bluesky.launcher3.util.StringUtil;
 
 /**
  * Default launcher application.
@@ -562,7 +563,9 @@ public class Launcher extends Activity
                     if (searchString.trim().length() > 0) {
                         ArrayList<AppInfo> searchList = new ArrayList<>();
                         for (AppInfo appInfo : listApps) {
-                            if (appInfo.getTitle().toString().toLowerCase().contains(searchString.toLowerCase())) {
+                            String appTitle = StringUtil.convertVNString(appInfo.getTitle().toString().toLowerCase().trim());
+                            searchString = StringUtil.convertVNString(searchString.toLowerCase().trim());
+                            if (appTitle.contains(searchString)) {
                                 searchList.add(appInfo);
                             }
                         }

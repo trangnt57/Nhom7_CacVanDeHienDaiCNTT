@@ -16,6 +16,7 @@ import java.util.List;
 import g7.bluesky.launcher3.AppInfo;
 import g7.bluesky.launcher3.BubbleTextView;
 import g7.bluesky.launcher3.R;
+import g7.bluesky.launcher3.util.StringUtil;
 
 /**
  * Created by tuanpt on 10/13/2015.
@@ -115,7 +116,9 @@ public class AppsListAdapter extends ArrayAdapter<AppInfo> implements Filterable
                 List<AppInfo> searchList = new ArrayList<>();
 
                 for (AppInfo app : originalAppList) {
-                    if (app.getTitle().toString().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                    String appTitle = StringUtil.convertVNString(app.getTitle().toString().toLowerCase().trim());
+                    constraint = StringUtil.convertVNString(constraint.toString().toLowerCase().trim());
+                    if (appTitle.contains(constraint)) {
                         searchList.add(app);
                     }
                 }
