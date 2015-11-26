@@ -28,7 +28,7 @@
         <ListPreference
             android:key="app_text_color"
             android:title="@string/app_text_color"
-            android:defaultValue="#000000"
+            android:defaultValue="#FFFFFF"
             android:entries="@array/app_text_color_titles"
             android:entryValues="@array/app_text_color_values"
             android:negativeButtonText="@null"
