@@ -1111,9 +1111,7 @@ public class Workspace extends SmoothPagedView
             if(firstTouch && (mTouchDownTime - previousTouchTime) <= 300) {
                 //do stuff here for double tap
                 firstTouch = false;
-                if (!isInOverviewMode()) {
-                    enterOverviewMode();
-                }
+                enterOverviewMode();
 
             } else {
                 previousTouchTime = System.currentTimeMillis();
