@@ -33,6 +33,10 @@
             android:entryValues="@array/app_text_color_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
+        <CheckBoxPreference
+            android:key="app_enable_extra_menu"
+            android:defaultValue="@bool/show_extra_menu"
+            android:title="@string/app_enable_extra_menu"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

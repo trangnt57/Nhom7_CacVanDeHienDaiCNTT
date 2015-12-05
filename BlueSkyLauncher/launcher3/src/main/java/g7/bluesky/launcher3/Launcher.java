@@ -239,6 +239,7 @@ public class Launcher extends Activity
 
     public static final String USER_HAS_MIGRATED = "launcher.user_migrated_from_old_data";
     private Intent appsListViewIntent;
+    private ExtraMenu mExtraMenu;
 
     /** The different states that Launcher can be in. */
     private enum State { NONE, WORKSPACE, APPS_CUSTOMIZE, APPS_CUSTOMIZE_SPRING_LOADED };
@@ -535,19 +536,11 @@ public class Launcher extends Activity
         //llExtraMenu = (LinearLayout) findViewById(R.id.ll_extra_menu);
         //llExtraMenu.addView(new ExtraMenu(this, null));
         flLauncher = (LauncherRootView) findViewById(R.id.launcher);
-        flLauncher.addView(new ExtraMenu(this, null));
-//        flLauncher.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//                Rect rect;
-//                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-//                Log.i("LongDT",v.getLeft()+"  "+ v.getTop()+"  "+ v.getRight()+"  "+ v.getBottom());
-//                Log.i("LongDT", event.getX()+"  "+event.getY());
-//                return true;
-//            }
-//
-//        });
+        mExtraMenu = new ExtraMenu(this, null);
+        flLauncher.addView(mExtraMenu);
+        if (! defaultSharedPref.getBoolean(SettingConstants.EXTRA_MENU_PREF_KEY, false)) {
+            mExtraMenu.setVisibility(View.GONE);
+        }
 
         editTextFilterApps.addTextChangedListener(new TextWatcher() {
 
@@ -621,7 +614,22 @@ public class Launcher extends Activity
         final int prefSortOptionVal = defaultSharedPref.getInt(SettingConstants.SORT_PREF_KEY, SettingConstants.SORT_A_Z);
         spinner.setSelection(prefSortOptionVal);
 
+        // Listen on pref change
+        prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                if (key.equalsIgnoreCase(SettingConstants.EXTRA_MENU_PREF_KEY)) {
+                    if (! defaultSharedPref.getBoolean(SettingConstants.EXTRA_MENU_PREF_KEY, false)) {
+                        mExtraMenu.setVisibility(View.GONE);
+                    } else {
+                        mExtraMenu.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        };
+        defaultSharedPref.registerOnSharedPreferenceChangeListener(prefChangeListener);
     }
+    private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener;
 
     private LauncherCallbacks mLauncherCallbacks;
 

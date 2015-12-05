@@ -61,5 +61,8 @@
         <item>Z-A</item>
         <item>Lượt sử dụng</item>
     </string-array>
+
+    <!-- Enable / Disable extra menu-->
+    <string name="app_enable_extra_menu">Menu đa nhiệm</string>
     
 </resources>
