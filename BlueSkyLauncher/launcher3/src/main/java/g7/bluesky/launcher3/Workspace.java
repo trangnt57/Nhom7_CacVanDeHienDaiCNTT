@@ -1049,7 +1049,7 @@ public class Workspace extends SmoothPagedView
         int childId = mLauncher.getViewIdForItem(info);
 
         boolean markCellsAsOccupied = !(child instanceof Folder);
-        if (!layout.addViewToCellLayout(child, insert ? 0 : -1, childId, lp, markCellsAsOccupied)) {
+        if (layout != null && !layout.addViewToCellLayout(child, insert ? 0 : -1, childId, lp, markCellsAsOccupied)) {
             // TODO: This branch occurs when the workspace is adding views
             // outside of the defined grid
             // maybe we should be deleting these items from the LauncherModel?
@@ -1099,6 +1099,8 @@ public class Workspace extends SmoothPagedView
         return super.dispatchUnhandledMove(focused, direction);
     }
 
+    boolean firstTouch = true;
+    long previousTouchTime = 0;
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getAction() & MotionEvent.ACTION_MASK) {
@@ -1106,6 +1108,17 @@ public class Workspace extends SmoothPagedView
             mXDown = ev.getX();
             mYDown = ev.getY();
             mTouchDownTime = System.currentTimeMillis();
+            if(firstTouch && (mTouchDownTime - previousTouchTime) <= 300) {
+                //do stuff here for double tap
+                firstTouch = false;
+                if (!isInOverviewMode()) {
+                    enterOverviewMode();
+                }
+
+            } else {
+                previousTouchTime = System.currentTimeMillis();
+                firstTouch = true;
+            }
             break;
         case MotionEvent.ACTION_POINTER_UP:
         case MotionEvent.ACTION_UP:
@@ -4261,6 +4274,9 @@ public class Workspace extends SmoothPagedView
             if (cellLayout != null) {
                 cellLayout.onDropChild(mDragInfo.cell);
             }
+
+            // Set visible on shortcut info
+            mDragInfo.cell.setVisibility(VISIBLE);
         }
         if ((d.cancelled || (beingCalledAfterUninstall && !mUninstallSuccessful))
                 && mDragInfo.cell != null) {
@@ -4442,7 +4458,7 @@ public class Workspace extends SmoothPagedView
 
     @Override
     public boolean supportsAppInfoDropTarget() {
-        return false;
+        return true;
     }
 
     @Override
