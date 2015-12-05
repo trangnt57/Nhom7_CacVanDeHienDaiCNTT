@@ -23,6 +23,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.SystemClock;
@@ -642,7 +643,7 @@ public class Folder extends LinearLayout implements DragSource, View.OnClickList
         final BubbleTextView textView =
             (BubbleTextView) mInflater.inflate(R.layout.folder_application, this, false);
         textView.applyFromShortcutInfo(item, mIconCache, false);
-
+        textView.setTextColor(Color.parseColor("#333333"));
         textView.setOnClickListener(this);
         textView.setOnLongClickListener(this);
         textView.setOnFocusChangeListener(mFocusIndicatorHandler);
@@ -897,7 +898,7 @@ public class Folder extends LinearLayout implements DragSource, View.OnClickList
 
     @Override
     public boolean supportsAppInfoDropTarget() {
-        return false;
+        return true;
     }
 
     @Override
