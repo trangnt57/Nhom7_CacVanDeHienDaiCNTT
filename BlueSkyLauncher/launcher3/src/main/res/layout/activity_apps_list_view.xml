@@ -45,6 +45,11 @@
         android:layout_weight="1"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@android:drawable/divider_horizontal_dark"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:fastScrollEnabled="true"
+        android:smoothScrollbar="true"
+        android:fastScrollAlwaysVisible="true"
+        android:scrollbarStyle="outsideOverlay"
+        android:fadeScrollbars="false"/>
 
 </LinearLayout>

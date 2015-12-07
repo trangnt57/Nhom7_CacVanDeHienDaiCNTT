@@ -38,4 +38,6 @@
 
     <color name = "bg_exmenu">#EEEFEF</color>
 
+    <color name = "listview_fast_scrollbar_text_color">#DA4A38</color>
+
 </resources>

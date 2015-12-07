@@ -44,6 +44,7 @@ public class AppsListViewActivity extends AppCompatActivity {
     private UserManagerCompat mUserManager;
     private AppsListAdapter appListAdapter;
     private SharedPreferences defaultSharedPref;
+    private int textColor;
 
     public AppsListViewActivity() {
         super();
@@ -56,7 +57,7 @@ public class AppsListViewActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.list_view);
         EditText inputSearch = (EditText) findViewById(R.id.inputSearch);
 
-        int textColor = getResources().getColor(R.color.quantum_panel_text_color);
+        textColor = getResources().getColor(R.color.quantum_panel_text_color);
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.sky);
         int drawableOpacity = 255;
 
@@ -94,10 +95,6 @@ public class AppsListViewActivity extends AppCompatActivity {
                 listApps.add(appInfo);
             }
         }
-
-        appListAdapter = new AppsListAdapter(getBaseContext(), listApps);
-        listView.setAdapter(appListAdapter);
-        appListAdapter.setTextColor(textColor);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -167,6 +164,10 @@ public class AppsListViewActivity extends AppCompatActivity {
                 int prefVal = defaultSharedPref.getInt(SettingConstants.SORT_PREF_KEY, SettingConstants.SORT_A_Z);
 
                 LauncherUtil.sortListApps(defaultSharedPref, listApps, prefVal);
+                appListAdapter = new AppsListAdapter(getBaseContext(), listApps);
+                listView.setAdapter(appListAdapter);
+                appListAdapter.setTextColor(textColor);
+                appListAdapter.notifyDataSetChanged();
                 listView.invalidateViews();
             }
 
