@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="system_app">Hệ thống</string>
+    <string name="entertainment_app">Giải trí</string>
+    <string name="personal_app">Cá nhân</string>
+    <string name="tools_app">Công cụ</string>
+    <string name="games_app">Trò chơi</string>
+    <string name="internet_app">Internet</string>
+    <string name="education_app">Giáo dục</string>
+    <string name="others_app">Khác</string>
+</resources>

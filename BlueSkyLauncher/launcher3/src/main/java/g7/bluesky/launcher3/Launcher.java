@@ -125,8 +125,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import g7.bluesky.launcher3.DropTarget.DragObject;
 import g7.bluesky.launcher3.ExTraMenu.ExtraMenu;
@@ -398,6 +401,8 @@ public class Launcher extends Activity
 
     private List<AppInfo> listApps;
     private EditText editTextFilterApps;
+
+    private final int DEFAULT_SCREEN_ID = 1;
 
     private static class PendingAddArguments {
         int requestCode;
@@ -4388,6 +4393,8 @@ public class Launcher extends Activity
             mWorkspace.createCustomContentContainer();
             populateCustomContentContainer();
         }
+
+        mWorkspace.setCurrentPage(DEFAULT_SCREEN_ID);
     }
 
     @Override
@@ -4867,10 +4874,103 @@ public class Launcher extends Activity
                 this.listApps = apps;
                 mAppsCustomizeContent.onPackagesUpdated(
                         LauncherModel.getSortedWidgetsAndShortcuts(this));
+
+                addAppsCategoryFolders(apps);
             }
         }
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.bindAllApplications(apps);
+        }
+    }
+
+    private void addAppsCategoryFolders(List<AppInfo> apps) {
+
+        String systemCategory = getString(R.string.system_app);
+        String entertainmentCategory = getString(R.string.entertainment_app);
+        String personalCategory = getString(R.string.personal_app);
+        String toolsCategory = getString(R.string.tools_app);
+        String gamesCategory = getString(R.string.games_app);
+        String internetCategory = getString(R.string.internet_app);
+        String educationCategory = getString(R.string.education_app);
+        String othersCategory = getString(R.string.others_app);
+
+        Map<String, FolderInfo> folderInfoMap = new LinkedHashMap<>();
+        folderInfoMap.put(systemCategory, new FolderInfo());
+        folderInfoMap.put(entertainmentCategory, new FolderInfo());
+        folderInfoMap.put(personalCategory, new FolderInfo());
+        folderInfoMap.put(toolsCategory, new FolderInfo());
+        folderInfoMap.put(gamesCategory, new FolderInfo());
+        folderInfoMap.put(internetCategory, new FolderInfo());
+        folderInfoMap.put(educationCategory, new FolderInfo());
+        folderInfoMap.put(othersCategory, new FolderInfo());
+
+        mWorkspace.addExtraEmptyScreen();
+        long newScreenId = mWorkspace.commitExtraEmptyScreen();
+        // mWorkspace.setCurrentPage((int) newScreenId);
+        int screenRows = (int) LauncherAppState.getInstance().getDynamicGrid().getDeviceProfile().numRows;
+        int screenCols = (int) LauncherAppState.getInstance().getDynamicGrid().getDeviceProfile().numColumns;
+
+        for (AppInfo appInfo : apps) {
+            String appName = appInfo.getComponentName().getPackageName().toLowerCase();
+
+            ShortcutInfo shortcutInfo = new ShortcutInfo(appInfo);
+            String category = getString(R.string.others_app);
+            if (Pattern.compile("(.*)(" + AppCategory.SYSTEM_APPS + ")(.*)").matcher(appName).find()) {
+                category = systemCategory;
+            } else if (Pattern.compile("(.*)(" + AppCategory.PERSONAL_APPS + ")(.*)").matcher(appName).find()) {
+                category = personalCategory;
+            } else if (Pattern.compile("(.*)(" + AppCategory.TOOLS_APPS + ")(.*)").matcher(appName).find()) {
+                category = toolsCategory;
+            } else if (Pattern.compile("(.*)(" + AppCategory.GAMES_APPS + ")(.*)").matcher(appName).find()) {
+                category = gamesCategory;
+            } else if (Pattern.compile("(.*)(" + AppCategory.INTERNET_APPS + ")(.*)").matcher(appName).find()) {
+                category = internetCategory;
+            } else if (Pattern.compile("(.*)(" + AppCategory.EDUCATION_APPS + ")(.*)").matcher(appName).find()) {
+                category = educationCategory;
+            } else if (Pattern.compile("(.*)(" + AppCategory.ENTERTAINMENT_APPS + ")(.*)").matcher(appName).find()) {
+                category = entertainmentCategory;
+            }
+            folderInfoMap.get(category).add(shortcutInfo);
+            folderInfoMap.get(category).setTitle(category);
+        }
+
+        // If folder contain one app then add it to other category
+        for (String key: folderInfoMap.keySet()) {
+            FolderInfo folderInfo = folderInfoMap.get(key);
+            int folderChildrenCount = 0;
+            if (folderInfo != null && (folderChildrenCount = folderInfo.contents.size()) > 0) {
+                if (folderChildrenCount == 1) {
+                    if (folderInfoMap.get(othersCategory) != null) {
+                        folderInfoMap.get(othersCategory).add(folderInfo.contents.get(0));
+                    }
+                }
+            }
+        }
+
+        int col = 0;
+        int row = screenRows - 1;
+        for (String key: folderInfoMap.keySet()) {
+            FolderInfo folderInfo = folderInfoMap.get(key);
+            int folderChildrenCount = 0;
+            if (folderInfo != null && (folderChildrenCount = folderInfo.contents.size()) > 0) {
+                if (folderChildrenCount > 1) {
+                    FolderIcon newFolder = FolderIcon.fromXml(R.layout.folder_icon, this,
+                            (ViewGroup) mWorkspace.getChildAt(mWorkspace.getCurrentPage()),
+                            folderInfo, mIconCache);
+                    mWorkspace.addInScreen(newFolder, LauncherSettings.Favorites.CONTAINER_DESKTOP, newScreenId, col,
+                            row, 1, 1);
+                    if (col < screenCols - 1) {
+                        col++;
+                    } else {
+                        col = 0;
+                        if (row > 0) {
+                            row--;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="system_app">System</string>
+    <string name="entertainment_app">Entertainment</string>
+    <string name="personal_app">Personal</string>
+    <string name="tools_app">Tools</string>
+    <string name="games_app">Games</string>
+    <string name="internet_app">Internet</string>
+    <string name="education_app">Education</string>
+    <string name="others_app">Others</string>
+</resources>
