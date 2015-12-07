@@ -402,7 +402,7 @@ public class Launcher extends Activity
     private List<AppInfo> listApps;
     private EditText editTextFilterApps;
 
-    private final int DEFAULT_SCREEN_ID = 1;
+    private final int DEFAULT_SCREEN_ID = 2;
 
     private static class PendingAddArguments {
         int requestCode;
