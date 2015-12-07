@@ -42,3 +42,8 @@
    * Sửa lại bộ lọc với Tiếng Việt
    * Sửa theme mặc định
    * Thêm tùy chọn sắp xếp ứng dụng theo A-Z, Z-A hoặc theo tần suất sử dụng
+
+---
+#### :white_check_mark: 12/7/2015
+   * Thêm tính năng double tap, chức năng ẩn hiện menu phụ
+   * Phân loại ứng dụng và thêm các thư mục vào màn hình ban đầu
