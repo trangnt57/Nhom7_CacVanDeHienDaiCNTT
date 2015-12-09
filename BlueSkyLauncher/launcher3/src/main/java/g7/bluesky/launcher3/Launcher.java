@@ -106,6 +106,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -405,6 +406,7 @@ public class Launcher extends Activity
 
     private List<AppInfo> listApps;
     private EditText editTextFilterApps;
+    private LinearLayout layoutFilterAndSortApps;
 
     private final int DEFAULT_SCREEN_ID = 2;
 
@@ -1600,6 +1602,7 @@ public class Launcher extends Activity
 
         // Set up filter input text
         editTextFilterApps = (EditText) findViewById(R.id.editTextFilterApps);
+        layoutFilterAndSortApps = (LinearLayout) findViewById(R.id.layoutFilterAndSortApps);
 
         // Set custom theme
         setCustomTheme();
@@ -2807,7 +2810,7 @@ public class Launcher extends Activity
 
             } else {
                 // Show filter in Apps view
-                editTextFilterApps.setVisibility(View.VISIBLE);
+                layoutFilterAndSortApps.setVisibility(View.VISIBLE);
                 // Reset filter
                editTextFilterApps.setText("");
 
@@ -3027,7 +3030,10 @@ public class Launcher extends Activity
             Toast.makeText(this, R.string.safemode_widget_error, Toast.LENGTH_SHORT).show();
         } else {
             // Hide filter in Widget view
-            editTextFilterApps.setVisibility(View.GONE);
+            layoutFilterAndSortApps.setVisibility(View.GONE);
+
+            // Don't set background in widget view
+            mAppsCustomizeTabHost.setBackground(null);
 
             showAllApps(true, AppsCustomizePagedView.ContentType.Widgets, true);
             if (mLauncherCallbacks != null) {
