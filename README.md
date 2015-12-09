@@ -11,6 +11,7 @@
 	* Build Launcher3 với Android Studio:  [fookwood/Launcher3](https://github.com/fookwood/Launcher3/)
 * **Thư viện**: 
 	* [yanchenko/droidparts](https://github.com/yanchenko/droidparts)
+	* Icon [powerpoint45/BasicLauncher](https://github.com/powerpoint45/BasicLauncher), [PedroPegueroJr/moonshine-iconpack](https://github.com/PedroPegueroJr/moonshine-iconpack), [numixproject/com.numix.icons_circle](https://github.com/numixproject/com.numix.icons_circle), [numixproject/com.numix.icons_fold](https://github.com/numixproject/com.numix.icons_fold)
 * **License**
 	* [Apache License V2] (LICENSE.md)
 
@@ -44,6 +45,7 @@
    * Thêm tùy chọn sắp xếp ứng dụng theo A-Z, Z-A hoặc theo tần suất sử dụng
 
 ---
-#### :white_check_mark: 7/12/2015
+#### :white_check_mark: 9/12/2015
    * Thêm tính năng double tap, chức năng ẩn hiện menu phụ
    * Phân loại ứng dụng và thêm các thư mục vào màn hình ban đầu
+   * Hỗ trợ icon pack (Numix, Moonshine, Flat,...)
