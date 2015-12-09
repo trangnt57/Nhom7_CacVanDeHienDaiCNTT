@@ -2,7 +2,11 @@ package g7.bluesky.launcher3.setting;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -14,6 +18,7 @@ import android.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import g7.bluesky.launcher3.Launcher;
 import g7.bluesky.launcher3.R;
 
 
@@ -128,6 +133,78 @@ public class SettingsActivity extends PreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(SettingConstants.THEME_PREF_KEY));
             bindPreferenceSummaryToValue(findPreference(SettingConstants.TEXT_COLOR_PREF_KEY));
             bindPreferenceSummaryToValue(findPreference(SettingConstants.THEME_OPACITY_PREF_KEY));
+
+            // List to select icon pack
+            final ListPreference lp = (ListPreference) findPreference(SettingConstants.ICON_THEME_PREF_KEY);
+
+            // Value to save to preference
+            final List<String> iconPacksPackageName = new ArrayList<>();
+            // Value to display lable
+            final List<String> iconPacksName = new ArrayList<>();
+            // Value to check if icon is installed
+            final List<Boolean> iconPacksIsInstalled = new ArrayList<>();
+
+            // Default icon
+            iconPacksName.add("Default");
+            iconPacksPackageName.add(Launcher.class.getPackage().getName());
+            iconPacksIsInstalled.add(true);
+
+            // Get icon pack used by Apex launcher
+            PackageManager pm = getActivity().getPackageManager();
+            final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+            mainIntent.addCategory("com.anddoes.launcher.THEME");
+            List<ResolveInfo> installPacks = pm.queryIntentActivities(mainIntent, 0);
+            if (installPacks != null && installPacks.size() > 0) {
+                for (ResolveInfo resolveInfo: installPacks) {
+                    iconPacksPackageName.add(resolveInfo.activityInfo.packageName);
+                    iconPacksName.add(resolveInfo.loadLabel(pm).toString());
+                    iconPacksIsInstalled.add(true);
+                }
+            }
+
+            // Add some default icon if they are not installed
+            String[] someIconsName = {"nexbit.icons.moonshine===Moonshine", "com.numix.icons_circle===Numix Circle", "com.numix.icons_fold===Numix Fold"};
+            for (int i = 0; i < someIconsName.length; ++i) {
+                String tmp[] = someIconsName[i].split("===");
+                if (! iconPacksPackageName.contains(tmp[0])) {
+                    iconPacksPackageName.add(tmp[0]);
+                    iconPacksName.add("[Install] " + tmp[1]);
+                    iconPacksIsInstalled.add(false);
+                }
+            }
+
+            // Set default value is system icons
+            if (lp.getValue() == null) {
+                lp.setValue(Launcher.class.getPackage().getName());
+            }
+            lp.setEntries(iconPacksName.toArray(new String[iconPacksPackageName.size()]));
+            lp.setEntryValues(iconPacksPackageName.toArray(new String[iconPacksPackageName.size()]));
+            String selectedIconTheme = getPreferenceManager().getSharedPreferences().getString(SettingConstants.ICON_THEME_PREF_KEY, Launcher.class.getPackage().getName());
+            int idxOfSelectedIconTheme = iconPacksPackageName.indexOf(selectedIconTheme);
+            if (idxOfSelectedIconTheme != -1 && idxOfSelectedIconTheme < iconPacksName.size()) {
+                lp.setSummary(iconPacksName.get(idxOfSelectedIconTheme));
+            }
+
+            lp.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String iconTheme = newValue.toString();
+                    int idxOfIconTheme = iconPacksPackageName.indexOf(iconTheme);
+
+                    if (idxOfIconTheme != -1 && idxOfIconTheme < iconPacksIsInstalled.size()) {
+                        // If icon pack is installed then set to preference else go to Play store
+                        if (iconPacksIsInstalled.get(idxOfIconTheme)) {
+                            lp.setSummary(iconPacksName.get(idxOfIconTheme));
+                            getActivity().finish();
+                            return true;
+                        } else {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + iconTheme)));
+                            getActivity().finish();
+                        }
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

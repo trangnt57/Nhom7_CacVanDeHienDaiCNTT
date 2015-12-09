@@ -11,6 +11,7 @@ public class SettingConstants {
     public static final String LAYOUT_PREF_KEY = "app_layout";
     public static final String SORT_PREF_KEY = "sort";
     public static final String EXTRA_MENU_PREF_KEY = "app_enable_extra_menu";
+    public static final String ICON_THEME_PREF_KEY = "icon_theme";
 
     public static final String BLUE_SKY_THEME = "0";
     public static final String BLUE_THEME = "1";

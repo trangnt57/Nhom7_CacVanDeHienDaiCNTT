@@ -18,6 +18,9 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
         <ListPreference
+            android:key="icon_theme"
+            android:title="@string/app__select_icon_theme"></ListPreference>
+        <ListPreference
             android:key="app_theme_opacity"
             android:title="@string/app_theme_opacity"
             android:defaultValue="255"

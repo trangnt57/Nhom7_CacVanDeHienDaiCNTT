@@ -66,4 +66,7 @@
     <string name="app_enable_extra_menu">Extra Menu</string>
     <bool name="show_extra_menu">true</bool>
 
+    <!-- Icon pack -->
+    <string name="app__select_icon_theme">Icon</string>
+
 </resources>

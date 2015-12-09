@@ -170,6 +170,7 @@ public class ShortcutInfo extends ItemInfo {
         customIcon = false;
         flags = info.flags;
         firstInstallTime = info.firstInstallTime;
+        setIcon(info.getIconBitmap());
     }
 
     public void setIcon(Bitmap b) {

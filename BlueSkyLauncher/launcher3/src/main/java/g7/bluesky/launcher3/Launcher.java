@@ -52,11 +52,13 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -144,6 +146,8 @@ import g7.bluesky.launcher3.compat.UserManagerCompat;
 import g7.bluesky.launcher3.listview.AppsListViewActivity;
 import g7.bluesky.launcher3.setting.SettingConstants;
 import g7.bluesky.launcher3.setting.SettingsActivity;
+import g7.bluesky.launcher3.setting.ThemeTools;
+import g7.bluesky.launcher3.setting.Tools;
 import g7.bluesky.launcher3.util.LauncherUtil;
 import g7.bluesky.launcher3.util.StringUtil;
 
@@ -418,9 +422,11 @@ public class Launcher extends Activity
 
     FocusIndicatorView mFocusHandler;
 
+    static Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i("LONGDT", "Start launcher");
+        activity = this;
         if (DEBUG_STRICT_MODE) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
@@ -629,6 +635,9 @@ public class Launcher extends Activity
                     } else {
                         mExtraMenu.setVisibility(View.VISIBLE);
                     }
+                } else if (key.equalsIgnoreCase(SettingConstants.ICON_THEME_PREF_KEY)) {
+                    mModel.forceReload();
+                    loadIconPack();
                 }
             }
         };
@@ -4478,6 +4487,14 @@ public class Launcher extends Activity
      */
     public void bindItems(final ArrayList<ItemInfo> shortcuts, final int start, final int end,
                           final boolean forceAnimateIcons) {
+
+        List<ShortcutInfo> shortcutInfos = new ArrayList<>();
+        for (ItemInfo itemInfo: shortcuts) {
+            if (itemInfo instanceof ShortcutInfo) {
+                shortcutInfos.add((ShortcutInfo) itemInfo);
+            }
+        }
+        loadIconPack(shortcutInfos);
         Runnable r = new Runnable() {
             public void run() {
                 bindItems(shortcuts, start, end, forceAnimateIcons);
@@ -4875,7 +4892,9 @@ public class Launcher extends Activity
                 mAppsCustomizeContent.onPackagesUpdated(
                         LauncherModel.getSortedWidgetsAndShortcuts(this));
 
-                addAppsCategoryFolders(apps);
+                loadIconPack();
+
+                addAppsCategoryFolders(listApps);
             }
         }
         if (mLauncherCallbacks != null) {
@@ -5520,6 +5539,258 @@ public class Launcher extends Activity
                     return null;
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void) null);
+        }
+    }
+
+    public void loadIconPack() {
+        //theming vars-----------------------------------------------
+        PackageManager pm = getPackageManager();
+        final int ICONSIZE = Tools.numtodp(64, Launcher.this);
+        Resources themeRes = null;
+        String resPacName = defaultSharedPref.getString(SettingConstants.ICON_THEME_PREF_KEY, "");
+        String iconResource = null;
+        int intres = 0;
+        int intresiconback = 0;
+        int intresiconfront = 0;
+        int intresiconmask = 0;
+        float scaleFactor = 1.0f;
+
+        Paint p = new Paint(Paint.FILTER_BITMAP_FLAG);
+        p.setAntiAlias(true);
+
+        Paint origP = new Paint(Paint.FILTER_BITMAP_FLAG);
+        origP.setAntiAlias(true);
+
+        Paint maskp = new Paint(Paint.FILTER_BITMAP_FLAG);
+        maskp.setAntiAlias(true);
+        maskp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+
+        if (resPacName.compareTo("") != 0) {
+            try {
+                themeRes = pm.getResourcesForApplication(resPacName);
+            } catch (Exception e) {
+            }
+            ;
+            if (themeRes != null) {
+                String[] backAndMaskAndFront = ThemeTools.getIconBackAndMaskResourceName(themeRes, resPacName);
+                if (backAndMaskAndFront[0] != null)
+                    intresiconback = themeRes.getIdentifier(backAndMaskAndFront[0], "drawable", resPacName);
+                if (backAndMaskAndFront[1] != null)
+                    intresiconmask = themeRes.getIdentifier(backAndMaskAndFront[1], "drawable", resPacName);
+                if (backAndMaskAndFront[2] != null)
+                    intresiconfront = themeRes.getIdentifier(backAndMaskAndFront[2], "drawable", resPacName);
+            }
+        }
+
+        BitmapFactory.Options uniformOptions = new BitmapFactory.Options();
+        uniformOptions.inScaled = false;
+        uniformOptions.inDither = false;
+        uniformOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+        Canvas origCanv;
+        Canvas canvas;
+        scaleFactor = ThemeTools.getScaleFactor(themeRes, resPacName);
+        Bitmap back = null;
+        Bitmap mask = null;
+        Bitmap front = null;
+        Bitmap scaledBitmap = null;
+        Bitmap scaledOrig = null;
+        Bitmap orig = null;
+
+        if (resPacName.compareTo("") != 0 && themeRes != null) {
+            try {
+                if (intresiconback != 0)
+                    back = BitmapFactory.decodeResource(themeRes, intresiconback, uniformOptions);
+            } catch (Exception e) {
+            }
+            try {
+                if (intresiconmask != 0)
+                    mask = BitmapFactory.decodeResource(themeRes, intresiconmask, uniformOptions);
+            } catch (Exception e) {
+            }
+            try {
+                if (intresiconfront != 0)
+                    front = BitmapFactory.decodeResource(themeRes, intresiconfront, uniformOptions);
+            } catch (Exception e) {
+            }
+        }
+        //theming vars-----------------------------------------------
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inDither = true;
+
+        for (int I = 0; I < listApps.size(); I++) {
+            if (themeRes != null) {
+                iconResource = null;
+                intres = 0;
+                iconResource = ThemeTools.getResourceName(themeRes, resPacName, listApps.get(I).getComponentName().toString());
+                if (iconResource != null) {
+                    intres = themeRes.getIdentifier(iconResource, "drawable", resPacName);
+                }
+
+                if (intres != 0) {//has single drawable for app
+                    listApps.get(I).setIconBitmap(BitmapFactory.decodeResource(themeRes, intres, uniformOptions));
+                } else {
+                    Drawable drawable = listApps.get(I).getIconDrawable();
+                    if (drawable == null) {
+                        drawable = Utilities.createIconDrawable(listApps.get(I).getIconBitmap());
+                    }
+                    orig = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                    drawable.draw(new Canvas(orig));
+
+                    scaledOrig = Bitmap.createBitmap(ICONSIZE, ICONSIZE, Bitmap.Config.ARGB_8888);
+                    scaledBitmap = Bitmap.createBitmap(ICONSIZE, ICONSIZE, Bitmap.Config.ARGB_8888);
+                    canvas = new Canvas(scaledBitmap);
+                    if (back != null) {
+                        canvas.drawBitmap(back, Tools.getResizedMatrix(back, ICONSIZE, ICONSIZE), p);
+                    }
+
+                    origCanv = new Canvas(scaledOrig);
+                    orig = Tools.getResizedBitmap(orig, ((int) (ICONSIZE * scaleFactor)), ((int) (ICONSIZE * scaleFactor)));
+                    origCanv.drawBitmap(orig, scaledOrig.getWidth() - (orig.getWidth() / 2) - scaledOrig.getWidth() / 2, scaledOrig.getWidth() - (orig.getWidth() / 2) - scaledOrig.getWidth() / 2, origP);
+
+                    if (mask != null) {
+                        origCanv.drawBitmap(mask, Tools.getResizedMatrix(mask, ICONSIZE, ICONSIZE), maskp);
+                    }
+
+                    if (back != null) {
+                        canvas.drawBitmap(Tools.getResizedBitmap(scaledOrig, ICONSIZE, ICONSIZE), 0, 0, p);
+                    } else
+                        canvas.drawBitmap(Tools.getResizedBitmap(scaledOrig, ICONSIZE, ICONSIZE), 0, 0, p);
+
+                    if (front != null)
+                        canvas.drawBitmap(front, Tools.getResizedMatrix(front, ICONSIZE, ICONSIZE), p);
+
+                    listApps.get(I).setIconBitmap(scaledBitmap);
+                }
+            }
+        }
+    }
+
+    public void loadIconPack(List<ShortcutInfo> shortcuts) {
+        //theming vars-----------------------------------------------
+        PackageManager pm = getPackageManager();
+        final int ICONSIZE = Tools.numtodp(128, Launcher.this);
+        Resources themeRes = null;
+        String resPacName = defaultSharedPref.getString(SettingConstants.ICON_THEME_PREF_KEY, "");
+        String iconResource = null;
+        int intres = 0;
+        int intresiconback = 0;
+        int intresiconfront = 0;
+        int intresiconmask = 0;
+        float scaleFactor = 1.0f;
+
+        Paint p = new Paint(Paint.FILTER_BITMAP_FLAG);
+        p.setAntiAlias(true);
+
+        Paint origP = new Paint(Paint.FILTER_BITMAP_FLAG);
+        origP.setAntiAlias(true);
+
+        Paint maskp = new Paint(Paint.FILTER_BITMAP_FLAG);
+        maskp.setAntiAlias(true);
+        maskp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+
+        if (resPacName.compareTo("") != 0) {
+            try {
+                themeRes = pm.getResourcesForApplication(resPacName);
+            } catch (Exception e) {
+            }
+            ;
+            if (themeRes != null) {
+                String[] backAndMaskAndFront = ThemeTools.getIconBackAndMaskResourceName(themeRes, resPacName);
+                if (backAndMaskAndFront[0] != null)
+                    intresiconback = themeRes.getIdentifier(backAndMaskAndFront[0], "drawable", resPacName);
+                if (backAndMaskAndFront[1] != null)
+                    intresiconmask = themeRes.getIdentifier(backAndMaskAndFront[1], "drawable", resPacName);
+                if (backAndMaskAndFront[2] != null)
+                    intresiconfront = themeRes.getIdentifier(backAndMaskAndFront[2], "drawable", resPacName);
+            }
+        }
+
+        BitmapFactory.Options uniformOptions = new BitmapFactory.Options();
+        uniformOptions.inScaled = false;
+        uniformOptions.inDither = false;
+        uniformOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+        Canvas origCanv;
+        Canvas canvas;
+        scaleFactor = ThemeTools.getScaleFactor(themeRes, resPacName);
+        Bitmap back = null;
+        Bitmap mask = null;
+        Bitmap front = null;
+        Bitmap scaledBitmap = null;
+        Bitmap scaledOrig = null;
+        Bitmap orig = null;
+
+        if (resPacName.compareTo("") != 0 && themeRes != null) {
+            try {
+                if (intresiconback != 0)
+                    back = BitmapFactory.decodeResource(themeRes, intresiconback, uniformOptions);
+            } catch (Exception e) {
+            }
+            try {
+                if (intresiconmask != 0)
+                    mask = BitmapFactory.decodeResource(themeRes, intresiconmask, uniformOptions);
+            } catch (Exception e) {
+            }
+            try {
+                if (intresiconfront != 0)
+                    front = BitmapFactory.decodeResource(themeRes, intresiconfront, uniformOptions);
+            } catch (Exception e) {
+            }
+        }
+        //theming vars-----------------------------------------------
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inDither = true;
+
+        for (int I = 0; I < shortcuts.size(); I++) {
+            if (themeRes != null) {
+                iconResource = null;
+                intres = 0;
+                iconResource = ThemeTools.getResourceName(themeRes, resPacName, shortcuts.get(I).getTargetComponent().toString());
+                if (iconResource != null) {
+                    intres = themeRes.getIdentifier(iconResource, "drawable", resPacName);
+                }
+
+                if (intres != 0) {//has single drawable for app
+                    shortcuts.get(I).setIcon(BitmapFactory.decodeResource(themeRes, intres, uniformOptions));
+                } else {
+
+                    Drawable drawable = Utilities.createIconDrawable(shortcuts.get(I).getIcon(mIconCache));
+                    orig = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                    drawable.draw(new Canvas(orig));
+
+                    scaledOrig = Bitmap.createBitmap(ICONSIZE, ICONSIZE, Bitmap.Config.ARGB_8888);
+                    scaledBitmap = Bitmap.createBitmap(ICONSIZE, ICONSIZE, Bitmap.Config.ARGB_8888);
+                    canvas = new Canvas(scaledBitmap);
+                    if (back != null) {
+                        canvas.drawBitmap(back, Tools.getResizedMatrix(back, ICONSIZE, ICONSIZE), p);
+                    }
+
+                    origCanv = new Canvas(scaledOrig);
+                    orig = Tools.getResizedBitmap(orig, ((int) (ICONSIZE * scaleFactor)), ((int) (ICONSIZE * scaleFactor)));
+                    origCanv.drawBitmap(orig, scaledOrig.getWidth() - (orig.getWidth() / 2) - scaledOrig.getWidth() / 2, scaledOrig.getWidth() - (orig.getWidth() / 2) - scaledOrig.getWidth() / 2, origP);
+
+                    if (mask != null) {
+                        origCanv.drawBitmap(mask, Tools.getResizedMatrix(mask, ICONSIZE, ICONSIZE), maskp);
+                    }
+
+                    if (back != null) {
+                        canvas.drawBitmap(Tools.getResizedBitmap(scaledOrig, ICONSIZE, ICONSIZE), 0, 0, p);
+                    } else
+                        canvas.drawBitmap(Tools.getResizedBitmap(scaledOrig, ICONSIZE, ICONSIZE), 0, 0, p);
+
+                    if (front != null)
+                        canvas.drawBitmap(front, Tools.getResizedMatrix(front, ICONSIZE, ICONSIZE), p);
+
+                    shortcuts.get(I).setIcon(scaledBitmap);
+                }
+            }
         }
     }
 }
