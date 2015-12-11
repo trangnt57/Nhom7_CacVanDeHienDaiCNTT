@@ -311,21 +311,21 @@ public class AppsListViewActivity extends AppCompatActivity {
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         options.inDither = true;
 
-        for (int I = 0; I < listApps.size(); I++) {
+        for (int i = 0; i < listApps.size(); i++) {
             if (themeRes != null) {
                 iconResource = null;
                 intres = 0;
-                iconResource = ThemeTools.getResourceName(themeRes, resPacName, listApps.get(I).getComponentName().toString());
+                iconResource = ThemeTools.getResourceName(themeRes, resPacName, listApps.get(i).getComponentName().toString());
                 if (iconResource != null) {
                     intres = themeRes.getIdentifier(iconResource, "drawable", resPacName);
                 }
 
                 if (intres != 0) {//has single drawable for app
-                    listApps.get(I).setIconDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeResource(themeRes, intres, uniformOptions)));
+                    listApps.get(i).setIconDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeResource(themeRes, intres, uniformOptions)));
                 } else {
-                    Drawable drawable = listApps.get(I).getIconDrawable();
+                    Drawable drawable = listApps.get(i).getIconDrawable();
                     if (drawable == null) {
-                        drawable = Utilities.createIconDrawable(listApps.get(I).getIconBitmap());
+                        drawable = Utilities.createIconDrawable(listApps.get(i).getIconBitmap());
                     }
                     orig = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
@@ -354,7 +354,7 @@ public class AppsListViewActivity extends AppCompatActivity {
                     if (front != null)
                         canvas.drawBitmap(front, Tools.getResizedMatrix(front, ICONSIZE, ICONSIZE), p);
 
-                    listApps.get(I).setIconDrawable(new BitmapDrawable(getResources(), scaledBitmap));
+                    listApps.get(i).setIconDrawable(new BitmapDrawable(getResources(), scaledBitmap));
                 }
             }
         }

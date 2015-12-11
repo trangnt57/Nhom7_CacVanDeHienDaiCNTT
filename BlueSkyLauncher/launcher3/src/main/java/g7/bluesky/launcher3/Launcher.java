@@ -5634,21 +5634,21 @@ public class Launcher extends Activity
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         options.inDither = true;
 
-        for (int I = 0; I < listApps.size(); I++) {
+        for (int i = 0; i < listApps.size(); i++) {
             if (themeRes != null) {
                 iconResource = null;
                 intres = 0;
-                iconResource = ThemeTools.getResourceName(themeRes, resPacName, listApps.get(I).getComponentName().toString());
+                iconResource = ThemeTools.getResourceName(themeRes, resPacName, listApps.get(i).getComponentName().toString());
                 if (iconResource != null) {
                     intres = themeRes.getIdentifier(iconResource, "drawable", resPacName);
                 }
 
                 if (intres != 0) {//has single drawable for app
-                    listApps.get(I).setIconBitmap(BitmapFactory.decodeResource(themeRes, intres, uniformOptions));
+                    listApps.get(i).setIconBitmap(BitmapFactory.decodeResource(themeRes, intres, uniformOptions));
                 } else {
-                    Drawable drawable = listApps.get(I).getIconDrawable();
+                    Drawable drawable = listApps.get(i).getIconDrawable();
                     if (drawable == null) {
-                        drawable = Utilities.createIconDrawable(listApps.get(I).getIconBitmap());
+                        drawable = Utilities.createIconDrawable(listApps.get(i).getIconBitmap());
                     }
                     orig = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
@@ -5677,7 +5677,7 @@ public class Launcher extends Activity
                     if (front != null)
                         canvas.drawBitmap(front, Tools.getResizedMatrix(front, ICONSIZE, ICONSIZE), p);
 
-                    listApps.get(I).setIconBitmap(scaledBitmap);
+                    listApps.get(i).setIconBitmap(scaledBitmap);
                 }
             }
         }
@@ -5761,20 +5761,20 @@ public class Launcher extends Activity
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         options.inDither = true;
 
-        for (int I = 0; I < shortcuts.size(); I++) {
+        for (int i = 0; i < shortcuts.size(); i++) {
             if (themeRes != null) {
                 iconResource = null;
                 intres = 0;
-                iconResource = ThemeTools.getResourceName(themeRes, resPacName, shortcuts.get(I).getTargetComponent().toString());
+                iconResource = ThemeTools.getResourceName(themeRes, resPacName, shortcuts.get(i).getTargetComponent().toString());
                 if (iconResource != null) {
                     intres = themeRes.getIdentifier(iconResource, "drawable", resPacName);
                 }
 
                 if (intres != 0) {//has single drawable for app
-                    shortcuts.get(I).setIcon(BitmapFactory.decodeResource(themeRes, intres, uniformOptions));
+                    shortcuts.get(i).setIcon(BitmapFactory.decodeResource(themeRes, intres, uniformOptions));
                 } else {
 
-                    Drawable drawable = Utilities.createIconDrawable(shortcuts.get(I).getIcon(mIconCache));
+                    Drawable drawable = Utilities.createIconDrawable(shortcuts.get(i).getIcon(mIconCache));
                     orig = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                     drawable.draw(new Canvas(orig));
@@ -5802,7 +5802,7 @@ public class Launcher extends Activity
                     if (front != null)
                         canvas.drawBitmap(front, Tools.getResizedMatrix(front, ICONSIZE, ICONSIZE), p);
 
-                    shortcuts.get(I).setIcon(scaledBitmap);
+                    shortcuts.get(i).setIcon(scaledBitmap);
                 }
             }
         }
