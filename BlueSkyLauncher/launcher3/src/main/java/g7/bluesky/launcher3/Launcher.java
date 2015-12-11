@@ -2812,7 +2812,15 @@ public class Launcher extends Activity
                 // Show filter in Apps view
                 layoutFilterAndSortApps.setVisibility(View.VISIBLE);
                 // Reset filter
-               editTextFilterApps.setText("");
+                editTextFilterApps.setText("");
+
+                // Sort apps if sort by most used
+                int sortOption = defaultSharedPref.getInt(SettingConstants.SORT_PREF_KEY, SettingConstants.SORT_A_Z);
+                if (sortOption == SettingConstants.SORT_MOST_USED) {
+                    LauncherUtil.sortListApps(defaultSharedPref, listApps, sortOption);
+
+                    mAppsCustomizeContent.setApps((ArrayList) listApps);
+                }
 
                 showAllApps(true, AppsCustomizePagedView.ContentType.Applications, false);
                 setCustomTheme();
