@@ -3076,15 +3076,19 @@ public class Launcher extends Activity
             mWorkspace.exitOverviewMode(false);
         }
 
+        showSettings();
+
+        if (mLauncherCallbacks != null) {
+            mLauncherCallbacks.onClickSettingsButton(v);
+        }
+    }
+
+    protected void showSettings() {
         final Intent settingsActivity = new Intent(this, SettingsActivity.class);
         // Use only one setting fragment
         settingsActivity.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName() );
         settingsActivity.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
         startActivity(settingsActivity);
-
-        if (mLauncherCallbacks != null) {
-            mLauncherCallbacks.onClickSettingsButton(v);
-        }
     }
 
     public void onTouchDownAllAppsButton(View v) {
