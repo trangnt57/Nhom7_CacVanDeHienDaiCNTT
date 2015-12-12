@@ -7,6 +7,8 @@
 	* Nguyễn Thu Trang (_Nhóm trưởng_)
 	* Đỗ Thành Long
 	* Lê Xuân Đạo
+* **Website**:
+    * http://bit.do/bluesky or http://trangnt57.github.io/Nhom7_CacVanDeHienDaiCNTT/
 * **Tham khảo**: 
 	* Build Launcher3 với Android Studio:  [fookwood/Launcher3](https://github.com/fookwood/Launcher3/)
 * **Thư viện**: 
