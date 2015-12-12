@@ -1,0 +1,8 @@
+.box {
+    text-align: center;
+}
+
+.box img {
+    max-width: 68px;
+    margin: 5px;
+}
